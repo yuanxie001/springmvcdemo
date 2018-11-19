@@ -1,0 +1,2 @@
+# springmvcdemo
+这个项目用来自己测试springmvc文档和源码的各种场景的。提供一个例子，跟着例子中不断的debug来读源码。
