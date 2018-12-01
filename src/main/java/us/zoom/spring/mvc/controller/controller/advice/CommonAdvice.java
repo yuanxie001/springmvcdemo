@@ -1,4 +1,4 @@
-package us.zoom.spring.mvc.controller;
+package us.zoom.spring.mvc.controller.controller.advice;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -22,12 +22,12 @@ public class CommonAdvice {
     @ResponseBody
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public Object handlerException(NullPointerException exception,HandlerMethod method){
-        
+
         String name = method.getBeanType().getName();
         Map map=new HashMap();
         map.put("error",exception.getMessage());
-        map.put("method bean",name);
-        map.put("method name",method.getMethod().getName());
+        map.put("method_bean",name);
+        map.put("method_name",method.getMethod().getName());
         return map;
     }
 }
