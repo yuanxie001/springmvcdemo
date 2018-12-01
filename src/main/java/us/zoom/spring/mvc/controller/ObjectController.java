@@ -14,7 +14,7 @@ import us.zoom.spring.domian.User;
  */
 @Controller
 public class ObjectController {
-    @RequestMapping(value = "/users/insert",method = RequestMethod.POST)
+    @RequestMapping(value = "/users/insert*",method = RequestMethod.POST)
     @ResponseBody
     public User add(User user){
         return user;
