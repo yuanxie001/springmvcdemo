@@ -15,6 +15,12 @@ import us.zoom.spring.mvc.validator.UserValidator;
 
 import java.util.List;
 
+/**
+ * InitBinder注解的方法每次调用之前都会之执行一次。执行的时机是数据绑定的时候。
+ * 也就是参数解析的时候执行这个方法。执行完成之后执行校验方法完成校验。
+ *
+ * 对于非标准型的参数解析是在ModelAttributeMethodProcessor中处理的。
+ */
 @Controller
 public class ValidatorController {
     @Autowired
