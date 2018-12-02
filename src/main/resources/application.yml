@@ -16,5 +16,12 @@ spring:
     mvc:
         servlet:
             load-on-startup: 1
+        # 处理请求可以被静态资源处理器拦截的url路径。
+        static-path-pattern: /static/*.html
+    # 标注静态资源存放在项目的路径
+    resources:
+      static-locations: classpath:/static/
     profiles:
         active: local
+
+
