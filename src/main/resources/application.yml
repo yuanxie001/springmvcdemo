@@ -17,8 +17,9 @@ spring:
         servlet:
             load-on-startup: 1
         # 处理请求可以被静态资源处理器拦截的url路径。
-        static-path-pattern: /static/*.html
+        static-path-pattern: /**
     # 标注静态资源存放在项目的路径
+    # 如果静态路径中有多层，则都会映射到目录的文件夹中
     resources:
       static-locations: classpath:/static/
     profiles:
