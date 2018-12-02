@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.method.HandlerMethod;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,8 +23,7 @@ public class CommonAdvice {
     @ExceptionHandler(value = NullPointerException.class)
     @ResponseBody
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public Object handlerException(NullPointerException exception,HandlerMethod method){
-
+    public Object handlerException(NullPointerException exception, HandlerMethod method){
         String name = method.getBeanType().getName();
         Map map=new HashMap();
         map.put("error",exception.getMessage());
