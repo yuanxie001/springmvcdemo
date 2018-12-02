@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import us.zoom.spring.domian.User;
+import us.zoom.spring.exception.ValidException;
 import us.zoom.spring.mvc.validator.UserValidator;
 
 import java.util.List;
@@ -37,7 +38,8 @@ public class ValidatorController {
             List<ObjectError> allErrors = result.getAllErrors();
             for(ObjectError error:allErrors){
                 String objectName = error.getObjectName();
-                return "error name"+objectName+" messge"+error.getDefaultMessage();
+                String message =  "error name"+objectName+" messge"+error.getDefaultMessage();
+                throw new ValidException(message);
             }
         }
         return "yes："+user.getName();
