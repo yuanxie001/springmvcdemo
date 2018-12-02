@@ -127,7 +127,12 @@
             <version>18.0</version>
             <scope>test</scope>
         </dependency>
-
+        <!-- 配置上传下载组件 -->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.3.3</version>
+        </dependency>
     </dependencies>
 
     <build>
