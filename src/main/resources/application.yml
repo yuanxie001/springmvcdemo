@@ -1,0 +1,19 @@
+logging:
+    config: classpath:logback.xml
+server:
+    port: 80
+spring:
+    datasource:
+        driverClassName: com.mysql.jdbc.Driver
+        name: adminDataSource
+        password: 123456
+        url: jdbc:mysql://47.96.72.250:3306/niuke?useUnicode=true&autoReconnect=true&characterEncoding=utf-8
+        username: root
+    mvc:
+        servlet:
+            load-on-startup: 1
+        view:
+            prefix: /WEB-INF/jsp/
+            suffix: .jsp
+    profiles:
+        active: local
