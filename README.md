@@ -7,4 +7,4 @@
  - 统一异常处理逻辑和异常的状态码设置。
  - @MatrixVariable的实现和配置逻辑
  - 使用flashAtrribute 实现重定向的数据传递的逻辑
- - spring boot的静态资源处理
+ - spring boot的静态资源处理（这个正常应该放在Nginx，这里有点多余）
