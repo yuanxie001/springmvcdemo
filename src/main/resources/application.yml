@@ -24,5 +24,14 @@ spring:
       static-locations: classpath:/static/
     profiles:
         active: local
+    freemarker:
+      suffix: .html
+      content-type: text/html
+      enabled: true
+      template-loader-path: classpath:/templates/
+      settings:
+        number_format: '0.00##'
+      request-context-attribute: req
+
 
 

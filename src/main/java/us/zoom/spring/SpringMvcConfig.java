@@ -1,24 +1,30 @@
 package us.zoom.spring;
 
+import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.OrderComparator;
 import org.springframework.http.MediaType;
 import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.resource.DefaultServletHttpRequestHandler;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerView;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 import org.springframework.web.servlet.view.xml.MappingJackson2XmlView;
 import org.springframework.web.util.UrlPathHelper;
 import us.zoom.spring.mvc.controller.interceptor.TestInterceptor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Configuration
 public class SpringMvcConfig implements WebMvcConfigurer {
@@ -26,6 +32,8 @@ public class SpringMvcConfig implements WebMvcConfigurer {
     private TestInterceptor testInterceptor;
     @Autowired
     private ContentNegotiationManager contentNegotiationManager;
+    @Autowired
+    private ApplicationContext applicationContext;
     /**
      * 添加拦截器支持
      * @param registry
@@ -74,6 +82,12 @@ public class SpringMvcConfig implements WebMvcConfigurer {
         // spring boot会先检查容器中有没有ContentNegotiatingViewResolver这个类的bean，没有就新建一个，有就直接启用。
         // 就是下面这个bean注解，提供一个ContentNegotiatingViewResolver来处理。
         registry.enableContentNegotiation(true);
+//        Map<String, ViewResolver> stringViewResolverMap = BeanFactoryUtils.beansOfTypeIncludingAncestors(applicationContext, ViewResolver.class);
+//        Optional<ViewResolver> any = stringViewResolverMap.values().stream().filter(viewResolver -> viewResolver.getClass().equals(FreeMarkerViewResolver.class)).findAny();
+//        if (any.isPresent()){
+//            registry.viewResolver(any.get());
+//        }
+
     }
 
     @Bean
@@ -87,12 +101,15 @@ public class SpringMvcConfig implements WebMvcConfigurer {
         MappingJackson2XmlView mappingJackson2XmlView = new MappingJackson2XmlView();
         views.add(mappingJackson2XmlView);
         contentNegotiatingViewResolver.setDefaultViews(views);
+        contentNegotiatingViewResolver.setUseNotAcceptableStatusCode(false);
         return contentNegotiatingViewResolver;
     }
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-
-        registry.addResourceHandler("/static/**");
+    @Bean
+    public FreeMarkerConfigurer freeMarkerConfigurer() {
+        FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
+        configurer.setTemplateLoaderPath("classpath:/templates/**");
+        return configurer;
     }
+
 }

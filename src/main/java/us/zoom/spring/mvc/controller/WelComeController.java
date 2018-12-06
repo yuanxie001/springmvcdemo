@@ -30,7 +30,7 @@ public class WelComeController implements EnvironmentAware {
         return "like you!";
     }
 
-    @RequestMapping(value = "/welcome", method = RequestMethod.GET)
+    @RequestMapping(value = "/welcome.json", method = RequestMethod.GET)
     @ResponseBody
     public Object index2(HttpServletRequest request) {
         String name = environment.getProperty("name");
