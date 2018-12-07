@@ -5,14 +5,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Controller
 public class FreemarkerController {
 
-    @RequestMapping("/welcome.html")
+    @RequestMapping("/welcome")
     public String welcome(@RequestParam(name = "user")String user,Model model){
         model.addAttribute("user",user);
-        model.addAttribute("latestProduct.url","index.html");
-        model.addAttribute("latestProduct.name","首页");
-        return "weblcome";
+        Map<String,String> map= new HashMap();
+        map.put("url","index.html");
+        map.put("name","首页");
+        model.addAttribute("latestProduct",map);
+        return "welcome";
     }
 }

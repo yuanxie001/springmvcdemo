@@ -1,41 +1,35 @@
 package us.zoom.spring;
 
+
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.OrderComparator;
 import org.springframework.http.MediaType;
 import org.springframework.web.accept.ContentNegotiationManager;
-import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
-import org.springframework.web.servlet.resource.DefaultServletHttpRequestHandler;
-import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerView;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
-import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
-import org.springframework.web.servlet.view.xml.MappingJackson2XmlView;
 import org.springframework.web.util.UrlPathHelper;
 import us.zoom.spring.mvc.controller.interceptor.TestInterceptor;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @Configuration
-public class SpringMvcConfig implements WebMvcConfigurer {
+public class SpringMvcConfig implements WebMvcConfigurer{
     @Autowired
     private TestInterceptor testInterceptor;
     @Autowired
     private ContentNegotiationManager contentNegotiationManager;
     @Autowired
     private ApplicationContext applicationContext;
+
     /**
      * 添加拦截器支持
+     *
      * @param registry
      */
     @Override
@@ -46,6 +40,7 @@ public class SpringMvcConfig implements WebMvcConfigurer {
 
     /**
      * 解决enable-matrix-variables=true,开启支持的问题。
+     *
      * @param configurer
      */
     @Override
@@ -70,8 +65,8 @@ public class SpringMvcConfig implements WebMvcConfigurer {
         configurer.ignoreAcceptHeader(false);
         // 扩展名到MIME的映射；favorPathExtension, favorParameter是true时起作用
         Map<String, MediaType> map = new HashMap<>();
-        map.put("json",MediaType.APPLICATION_JSON);
-        map.put("xml",MediaType.APPLICATION_XML);
+        map.put("json", MediaType.APPLICATION_JSON);
+        map.put("xml", MediaType.APPLICATION_XML);
         configurer.mediaTypes(map);
         configurer.defaultContentType(MediaType.APPLICATION_JSON);
     }
@@ -82,34 +77,50 @@ public class SpringMvcConfig implements WebMvcConfigurer {
         // spring boot会先检查容器中有没有ContentNegotiatingViewResolver这个类的bean，没有就新建一个，有就直接启用。
         // 就是下面这个bean注解，提供一个ContentNegotiatingViewResolver来处理。
         registry.enableContentNegotiation(true);
+        Map<String, ViewResolver> stringViewResolverMap = BeanFactoryUtils.beansOfTypeIncludingAncestors(applicationContext, ViewResolver.class);
+        Optional<ViewResolver> any = stringViewResolverMap.values().stream().filter(viewResolver -> viewResolver.getClass().equals(FreeMarkerViewResolver.class)).findAny();
+        if (any.isPresent()){
+            registry.viewResolver(any.get());
+        }
+
+    }
+
+//    @Bean
+//    public ContentNegotiatingViewResolver contentNegotiatingViewResolver() {
+//        ContentNegotiatingViewResolver contentNegotiatingViewResolver = new ContentNegotiatingViewResolver();
+//        contentNegotiatingViewResolver.setContentNegotiationManager(contentNegotiationManager);
+//        contentNegotiatingViewResolver.setOrder(0);
+//        MappingJackson2JsonView mappingJackson2JsonView = new MappingJackson2JsonView();
+//        List<View> views = new ArrayList<>();
+//        views.add(mappingJackson2JsonView);
+//        MappingJackson2XmlView mappingJackson2XmlView = new MappingJackson2XmlView();
+//        views.add(mappingJackson2XmlView);
+//        contentNegotiatingViewResolver.setDefaultViews(views);
+//        contentNegotiatingViewResolver.setUseNotAcceptableStatusCode(false);
+//        return contentNegotiatingViewResolver;
+//    }
+
+//    @Bean
+//    public FreeMarkerConfigurer freeMarkerConfigurer(){
+//        FreeMarkerConfigurer freeMarkerConfigurer = new FreeMarkerConfigurer();
+//        freeMarkerConfigurer.setTemplateLoaderPath("classpath:/templates/");
+//        freemarker.template.Configuration configuration = new freemarker.template.Configuration(freemarker.template.Configuration.VERSION_2_3_28);
+//        freeMarkerConfigurer.setConfiguration(configuration);
+//        return freeMarkerConfigurer;
+//    }
+//
+//    @Override
+//    public void afterPropertiesSet() throws Exception {
 //        Map<String, ViewResolver> stringViewResolverMap = BeanFactoryUtils.beansOfTypeIncludingAncestors(applicationContext, ViewResolver.class);
-//        Optional<ViewResolver> any = stringViewResolverMap.values().stream().filter(viewResolver -> viewResolver.getClass().equals(FreeMarkerViewResolver.class)).findAny();
-//        if (any.isPresent()){
-//            registry.viewResolver(any.get());
+//        Optional<ViewResolver> optionalViewResolver = stringViewResolverMap.values().stream().filter(viewResolver -> viewResolver.getClass().equals(FreeMarkerViewResolver.class)).findAny();
+//        if (optionalViewResolver.isPresent()){
+//            FreeMarkerViewResolver viewResolver = (FreeMarkerViewResolver) optionalViewResolver.get();
+//            viewResolver.setViewClass(FreeMarkerView.class);
+//            viewResolver.setContentType("text/html;charset=UTF-8");
+////            viewResolver.setPrefix("classpath:/templates/");
+//            viewResolver.setSuffix(".ftl");
+//            viewResolver.setOrder(0);
 //        }
 
-    }
-
-    @Bean
-    public ContentNegotiatingViewResolver contentNegotiatingViewResolver(){
-        ContentNegotiatingViewResolver contentNegotiatingViewResolver = new ContentNegotiatingViewResolver();
-        contentNegotiatingViewResolver.setContentNegotiationManager(contentNegotiationManager);
-        contentNegotiatingViewResolver.setOrder(0);
-        MappingJackson2JsonView mappingJackson2JsonView = new MappingJackson2JsonView();
-        List<View> views = new ArrayList<>();
-        views.add(mappingJackson2JsonView);
-        MappingJackson2XmlView mappingJackson2XmlView = new MappingJackson2XmlView();
-        views.add(mappingJackson2XmlView);
-        contentNegotiatingViewResolver.setDefaultViews(views);
-        contentNegotiatingViewResolver.setUseNotAcceptableStatusCode(false);
-        return contentNegotiatingViewResolver;
-    }
-
-    @Bean
-    public FreeMarkerConfigurer freeMarkerConfigurer() {
-        FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
-        configurer.setTemplateLoaderPath("classpath:/templates/**");
-        return configurer;
-    }
 
 }

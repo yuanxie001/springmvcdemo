@@ -1,5 +1,7 @@
 package us.zoom.spring.mvc.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -24,6 +26,7 @@ import java.util.List;
  */
 @Controller
 public class ValidatorController {
+    private static final Logger logger = LoggerFactory.getLogger(ValidatorController.class);
     @Autowired
     private UserValidator validator;
     @InitBinder
@@ -34,6 +37,7 @@ public class ValidatorController {
     @RequestMapping(value = "/user/add",method = RequestMethod.POST)
     @ResponseBody
     public Object addUser(@Validated User user, BindingResult result){
+        logger.info("access /usr/add start");
         if (result.hasErrors()){
             List<ObjectError> allErrors = result.getAllErrors();
             for(ObjectError error:allErrors){
@@ -42,6 +46,7 @@ public class ValidatorController {
                 throw new ValidException(message);
             }
         }
+        logger.info("access /usr/add end");
         return "yes："+user.getName();
     }
 }
