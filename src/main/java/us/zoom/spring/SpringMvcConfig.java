@@ -100,27 +100,4 @@ public class SpringMvcConfig implements WebMvcConfigurer{
 //        return contentNegotiatingViewResolver;
 //    }
 
-//    @Bean
-//    public FreeMarkerConfigurer freeMarkerConfigurer(){
-//        FreeMarkerConfigurer freeMarkerConfigurer = new FreeMarkerConfigurer();
-//        freeMarkerConfigurer.setTemplateLoaderPath("classpath:/templates/");
-//        freemarker.template.Configuration configuration = new freemarker.template.Configuration(freemarker.template.Configuration.VERSION_2_3_28);
-//        freeMarkerConfigurer.setConfiguration(configuration);
-//        return freeMarkerConfigurer;
-//    }
-//
-//    @Override
-//    public void afterPropertiesSet() throws Exception {
-//        Map<String, ViewResolver> stringViewResolverMap = BeanFactoryUtils.beansOfTypeIncludingAncestors(applicationContext, ViewResolver.class);
-//        Optional<ViewResolver> optionalViewResolver = stringViewResolverMap.values().stream().filter(viewResolver -> viewResolver.getClass().equals(FreeMarkerViewResolver.class)).findAny();
-//        if (optionalViewResolver.isPresent()){
-//            FreeMarkerViewResolver viewResolver = (FreeMarkerViewResolver) optionalViewResolver.get();
-//            viewResolver.setViewClass(FreeMarkerView.class);
-//            viewResolver.setContentType("text/html;charset=UTF-8");
-////            viewResolver.setPrefix("classpath:/templates/");
-//            viewResolver.setSuffix(".ftl");
-//            viewResolver.setOrder(0);
-//        }
-
-
 }
