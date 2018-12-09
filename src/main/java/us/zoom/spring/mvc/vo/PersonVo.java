@@ -1,8 +1,13 @@
 package us.zoom.spring.mvc.vo;
 
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.Date;
+@JacksonXmlRootElement(localName = "person")
 public class PersonVo {
+
     private Long id;
 
     private String name;
@@ -14,7 +19,8 @@ public class PersonVo {
     private String lanauge;
 
     private String zone;
-
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     private Date birthday;
 
     public Long getId() {
