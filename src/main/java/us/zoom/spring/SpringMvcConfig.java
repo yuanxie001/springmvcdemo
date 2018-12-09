@@ -85,19 +85,4 @@ public class SpringMvcConfig implements WebMvcConfigurer{
 
     }
 
-//    @Bean
-//    public ContentNegotiatingViewResolver contentNegotiatingViewResolver() {
-//        ContentNegotiatingViewResolver contentNegotiatingViewResolver = new ContentNegotiatingViewResolver();
-//        contentNegotiatingViewResolver.setContentNegotiationManager(contentNegotiationManager);
-//        contentNegotiatingViewResolver.setOrder(0);
-//        MappingJackson2JsonView mappingJackson2JsonView = new MappingJackson2JsonView();
-//        List<View> views = new ArrayList<>();
-//        views.add(mappingJackson2JsonView);
-//        MappingJackson2XmlView mappingJackson2XmlView = new MappingJackson2XmlView();
-//        views.add(mappingJackson2XmlView);
-//        contentNegotiatingViewResolver.setDefaultViews(views);
-//        contentNegotiatingViewResolver.setUseNotAcceptableStatusCode(false);
-//        return contentNegotiatingViewResolver;
-//    }
-
 }
