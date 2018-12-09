@@ -10,6 +10,8 @@
     <result column="zone" jdbcType="VARCHAR" property="zone" />
     <result column="birthday" jdbcType="TIMESTAMP" property="birthday" />
     <result column="is_delete" jdbcType="CHAR" property="isDelete" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -70,7 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, address, country, lanauge, zone, birthday, is_delete
+    id, name, address, country, lanauge, zone, birthday, is_delete, create_time, modified_time
   </sql>
   <select id="selectByExample" parameterType="us.zoom.spring.domian.PersonDOExample" resultMap="BaseResultMap">
     select
@@ -106,10 +108,12 @@
   <insert id="insert" parameterType="us.zoom.spring.domian.PersonDO">
     insert into person_info (id, name, address, 
       country, lanauge, zone, 
-      birthday, is_delete)
+      birthday, is_delete, create_time, 
+      modified_time)
     values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
       #{country,jdbcType=VARCHAR}, #{lanauge,jdbcType=VARCHAR}, #{zone,jdbcType=VARCHAR}, 
-      #{birthday,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=CHAR})
+      #{birthday,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="us.zoom.spring.domian.PersonDO">
     insert into person_info
@@ -138,6 +142,12 @@
       <if test="isDelete != null">
         is_delete,
       </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -163,6 +173,12 @@
       </if>
       <if test="isDelete != null">
         #{isDelete,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -199,6 +215,12 @@
       <if test="record.isDelete != null">
         is_delete = #{record.isDelete,jdbcType=CHAR},
       </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -213,7 +235,9 @@
       lanauge = #{record.lanauge,jdbcType=VARCHAR},
       zone = #{record.zone,jdbcType=VARCHAR},
       birthday = #{record.birthday,jdbcType=TIMESTAMP},
-      is_delete = #{record.isDelete,jdbcType=CHAR}
+      is_delete = #{record.isDelete,jdbcType=CHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -242,6 +266,12 @@
       <if test="isDelete != null">
         is_delete = #{isDelete,jdbcType=CHAR},
       </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -253,7 +283,9 @@
       lanauge = #{lanauge,jdbcType=VARCHAR},
       zone = #{zone,jdbcType=VARCHAR},
       birthday = #{birthday,jdbcType=TIMESTAMP},
-      is_delete = #{isDelete,jdbcType=CHAR}
+      is_delete = #{isDelete,jdbcType=CHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

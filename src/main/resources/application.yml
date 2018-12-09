@@ -8,10 +8,9 @@ server:
 spring:
     datasource:
         driverClassName: com.mysql.jdbc.Driver
-        name: adminDataSource
-        password: tiger
-        url: jdbc:mysql://47.96.72.250:3306/niuke?useUnicode=true&autoReconnect=true&characterEncoding=utf-8
-        username: scott
+        password: 123456
+        url: jdbc:mysql://192.168.137.242:3306/niuke?useUnicode=true&autoReconnect=true&characterEncoding=utf-8
+        username: root
         type: com.alibaba.druid.pool.DruidDataSource
 
     #配置mvc相关东西
@@ -37,6 +36,9 @@ spring:
       prefer-file-system-access: true
       suffix: .ftl
       template-loader-path: classpath:/templates/
+    mybatis:
+      mapper-locations: classpath:us.zoom.spring.mapper/*.xml  #注意：一定要对应mapper映射xml文件的所在路径
+      type-aliases-package: us.zoom.spring.domian  # 注意：对应实体类的路径
 
 
 

@@ -1,8 +1,8 @@
-package us.zoom.spring.domian;
+package us.zoom.spring.mvc.vo;
 
 import java.util.Date;
 
-public class PersonDO {
+public class PersonVo {
     private Long id;
 
     private String name;
@@ -17,12 +17,6 @@ public class PersonDO {
 
     private Date birthday;
 
-    private String isDelete;
-
-    private Date createTime;
-
-    private Date modifiedTime;
-
     public Long getId() {
         return id;
     }
@@ -36,7 +30,7 @@ public class PersonDO {
     }
 
     public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+        this.name = name;
     }
 
     public String getAddress() {
@@ -44,7 +38,7 @@ public class PersonDO {
     }
 
     public void setAddress(String address) {
-        this.address = address == null ? null : address.trim();
+        this.address = address;
     }
 
     public String getCountry() {
@@ -52,7 +46,7 @@ public class PersonDO {
     }
 
     public void setCountry(String country) {
-        this.country = country == null ? null : country.trim();
+        this.country = country;
     }
 
     public String getLanauge() {
@@ -60,7 +54,7 @@ public class PersonDO {
     }
 
     public void setLanauge(String lanauge) {
-        this.lanauge = lanauge == null ? null : lanauge.trim();
+        this.lanauge = lanauge;
     }
 
     public String getZone() {
@@ -68,7 +62,7 @@ public class PersonDO {
     }
 
     public void setZone(String zone) {
-        this.zone = zone == null ? null : zone.trim();
+        this.zone = zone;
     }
 
     public Date getBirthday() {
@@ -77,29 +71,5 @@ public class PersonDO {
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
-    }
-
-    public String getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(String isDelete) {
-        this.isDelete = isDelete == null ? null : isDelete.trim();
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getModifiedTime() {
-        return modifiedTime;
-    }
-
-    public void setModifiedTime(Date modifiedTime) {
-        this.modifiedTime = modifiedTime;
     }
 }
