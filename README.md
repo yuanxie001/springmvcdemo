@@ -8,3 +8,6 @@
  - @MatrixVariable的实现和配置逻辑
  - 使用flashAtrribute 实现重定向的数据传递的逻辑
  - spring boot的静态资源处理（这个正常应该放在Nginx，这里有点多余）
+ - 整合freemarker 视图解析
+ - 添加mybatis-generator自动生成mapper的处理
+ - 整合mybatis
