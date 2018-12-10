@@ -11,7 +11,7 @@ import java.util.Map;
 @Controller
 public class FreemarkerController {
 
-    @RequestMapping("/welcome")
+    @RequestMapping(value = {"/welcome","/welcome.*"})
     public String welcome(@RequestParam(name = "user")String user,Model model){
         model.addAttribute("user",user);
         Map<String,String> map= new HashMap();
