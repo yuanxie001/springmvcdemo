@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 @JacksonXmlRootElement(localName = "person")
 public class PersonVo {
 
     private Long id;
-
+    @NotNull
     private String name;
 
     private String address;

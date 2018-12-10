@@ -4,10 +4,9 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
     <!--数据库驱动-->
-    <context id="DB2Tables"    targetRuntime="MyBatis3">
-        <property name="suppressAllComments" value="true" />
-        <property name="useActualColumnNames" value="false" />
+    <context id="DB2Tables" targetRuntime="MyBatis3" >
         <commentGenerator>
+            <property name="useActualColumnNames" value="false" />
             <property name="suppressDate" value="true" />
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
@@ -34,7 +33,9 @@
         <table tableName="person_info"
                 domainObjectName="PersonDO" enableCountByExample="true"
                 enableUpdateByExample="true" enableDeleteByExample="true"
-                enableSelectByExample="true" selectByExampleQueryId="true" >
+                enableSelectByExample="true" selectByExampleQueryId="true">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+            <columnOverride column="id" property="id" javaType="Long" jdbcType="NUMERIC"/>
         </table>
     </context>
 </generatorConfiguration>

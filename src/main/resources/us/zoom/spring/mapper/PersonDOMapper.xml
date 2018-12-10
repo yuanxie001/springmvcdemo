@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="us.zoom.spring.mapper.PersonDOMapper">
   <resultMap id="BaseResultMap" type="us.zoom.spring.domian.PersonDO">
-    <id column="id" jdbcType="BIGINT" property="id" />
+    <id column="id" jdbcType="NUMERIC" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="country" jdbcType="VARCHAR" property="country" />
@@ -89,15 +89,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from person_info
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=NUMERIC}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+  <delete id="deleteByPrimaryKey" parameterType="Long">
     delete from person_info
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=NUMERIC}
   </delete>
   <delete id="deleteByExample" parameterType="us.zoom.spring.domian.PersonDOExample">
     delete from person_info
@@ -106,21 +106,24 @@
     </if>
   </delete>
   <insert id="insert" parameterType="us.zoom.spring.domian.PersonDO">
-    insert into person_info (id, name, address, 
-      country, lanauge, zone, 
-      birthday, is_delete, create_time, 
-      modified_time)
-    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
-      #{country,jdbcType=VARCHAR}, #{lanauge,jdbcType=VARCHAR}, #{zone,jdbcType=VARCHAR}, 
-      #{birthday,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{modifiedTime,jdbcType=TIMESTAMP})
+    <selectKey keyProperty="id" order="AFTER" resultType="Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into person_info (name, address, country, 
+      lanauge, zone, birthday, 
+      is_delete, create_time, modified_time
+      )
+    values (#{name,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, 
+      #{lanauge,jdbcType=VARCHAR}, #{zone,jdbcType=VARCHAR}, #{birthday,jdbcType=TIMESTAMP}, 
+      #{isDelete,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="us.zoom.spring.domian.PersonDO">
+    <selectKey keyProperty="id" order="AFTER" resultType="Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into person_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="name != null">
         name,
       </if>
@@ -150,9 +153,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
       </if>
@@ -192,7 +192,7 @@
     update person_info
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=BIGINT},
+        id = #{record.id,jdbcType=NUMERIC},
       </if>
       <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
@@ -228,7 +228,7 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update person_info
-    set id = #{record.id,jdbcType=BIGINT},
+    set id = #{record.id,jdbcType=NUMERIC},
       name = #{record.name,jdbcType=VARCHAR},
       address = #{record.address,jdbcType=VARCHAR},
       country = #{record.country,jdbcType=VARCHAR},
@@ -273,7 +273,7 @@
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=NUMERIC}
   </update>
   <update id="updateByPrimaryKey" parameterType="us.zoom.spring.domian.PersonDO">
     update person_info
@@ -286,6 +286,6 @@
       is_delete = #{isDelete,jdbcType=CHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=NUMERIC}
   </update>
 </mapper>

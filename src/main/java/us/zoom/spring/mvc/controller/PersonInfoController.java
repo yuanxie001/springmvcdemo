@@ -2,10 +2,7 @@ package us.zoom.spring.mvc.controller;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import us.zoom.spring.domian.PersonDO;
 import us.zoom.spring.mvc.vo.PersonVo;
 import us.zoom.spring.service.PersonSerivce;
@@ -21,5 +18,13 @@ public class PersonInfoController {
         PersonVo personVo = new PersonVo();
         BeanUtils.copyProperties(person,personVo);
         return  personVo;
+    }
+    @RequestMapping(value = "/save",method = RequestMethod.POST)
+    public PersonVo savePerson(@RequestBody PersonVo personVo){
+        PersonDO personDO = new PersonDO();
+        BeanUtils.copyProperties(personVo,personDO);
+        PersonDO person = personSerivce.savePerson(personDO);
+        personVo.setId(person.getId());
+        return personVo;
     }
 }
