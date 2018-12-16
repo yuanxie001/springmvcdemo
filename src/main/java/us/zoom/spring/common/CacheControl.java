@@ -20,12 +20,10 @@ import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 
 /*
-*
+ *
  * 用aop实现缓存的强一致性处理。
  *
- * 因为我们一般情况下，在处理缓存和db双写的时候，先删缓存和先更新db都会存在脏数据的可能性。首先我们来分析下这两种情况的发生：
- * 1、先删缓存：先删缓存的情况下，
-*/
+ */
 @Aspect
 @Component
 public class CacheControl {
@@ -38,6 +36,7 @@ public class CacheControl {
     /**
      * 这个方法书给@Cachable注解的condition条件用的。从而达到精细化控制操作缓存的时机。
      * 需要在添加上面那个注解的时候配置下，这个很操蛋。
+     *
      * @param id
      * @param prifix
      * @return
@@ -61,13 +60,13 @@ public class CacheControl {
     @Around("cacheEvict()")
     public Object around(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         Object[] args = proceedingJoinPoint.getArgs();
-        if (args==null || args.length==0){
+        if (args == null || args.length == 0) {
             return proceedingJoinPoint.proceed(args);
         }
 
         Class[] clsArray = new Class[args.length];
-        for (int i=0;i<args.length;i++) {
-            clsArray[i]=args[i].getClass();
+        for (int i = 0; i < args.length; i++) {
+            clsArray[i] = args[i].getClass();
         }
 
         Signature signature = proceedingJoinPoint.getSignature();
@@ -78,17 +77,17 @@ public class CacheControl {
         String key = "";
         if (annotation != null) {
             String[] value = annotation.value();
-            if (value.length>0){
-                key= CACHEING_PRIFIX + value[0] + "::";
+            if (value.length > 0) {
+                key = CACHEING_PRIFIX + value[0] + "::";
             }
             BeanWrapper beanWrapper = PropertyAccessorFactory.forBeanPropertyAccess(args[0]);
             Object id = beanWrapper.getPropertyValue("id");
-            if (id instanceof Long){
-                key=key+id;
+            if (id instanceof Long) {
+                key = key + id;
             }
         }
         ValueOperations<String, String> stringStringValueOperations = stringRedisTemplate.opsForValue();
-        stringStringValueOperations.set(key,VALUE,100, TimeUnit.SECONDS);
+        stringStringValueOperations.set(key, VALUE, 100, TimeUnit.SECONDS);
         Object proceed = proceedingJoinPoint.proceed(args);
         stringRedisTemplate.delete(key);
         return proceed;
