@@ -27,4 +27,13 @@ public class PersonInfoController {
         personVo.setId(person.getId());
         return personVo;
     }
+
+    @RequestMapping(value = "/update",method = RequestMethod.PATCH)
+    public PersonVo updatePerson(@RequestBody PersonVo personVo){
+        PersonDO personDO = new PersonDO();
+        BeanUtils.copyProperties(personVo,personDO);
+        PersonDO person = personSerivce.updatePerson(personDO);
+        personVo.setId(person.getId());
+        return personVo;
+    }
 }

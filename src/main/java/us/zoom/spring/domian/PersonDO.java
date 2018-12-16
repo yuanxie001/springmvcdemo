@@ -1,8 +1,10 @@
 package us.zoom.spring.domian;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class PersonDO {
+public class PersonDO implements Serializable{
+
     private Long id;
 
     private String name;

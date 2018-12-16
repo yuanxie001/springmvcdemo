@@ -7,7 +7,9 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import us.zoom.spring.common.annonation.EnableCache;
 
@@ -19,6 +21,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class CacheAdvise {
     private static final Logger logger = LoggerFactory.getLogger(CacheAdvise.class);
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
     private static Map<String,Object> cache = new ConcurrentHashMap<>(256);
     @Pointcut("@annotation(us.zoom.spring.common.annonation.EnableCache)")
     public void performance(){}

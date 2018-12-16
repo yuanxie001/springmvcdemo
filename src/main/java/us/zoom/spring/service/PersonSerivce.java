@@ -11,4 +11,6 @@ public interface PersonSerivce {
      * @return
      */
     PersonDO savePerson(PersonDO personDO);
+
+    PersonDO updatePerson(PersonDO personDO);
 }
