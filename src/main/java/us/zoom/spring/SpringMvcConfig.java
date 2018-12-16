@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
-import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
@@ -22,8 +21,6 @@ import java.util.Optional;
 public class SpringMvcConfig implements WebMvcConfigurer{
     @Autowired
     private TestInterceptor testInterceptor;
-    @Autowired
-    private ContentNegotiationManager contentNegotiationManager;
     @Autowired
     private ApplicationContext applicationContext;
 

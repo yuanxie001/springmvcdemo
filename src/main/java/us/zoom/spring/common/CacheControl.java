@@ -35,6 +35,13 @@ public class CacheControl {
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 
+    /**
+     * 这个方法书给@Cachable注解的condition条件用的。从而达到精细化控制操作缓存的时机。
+     * 需要在添加上面那个注解的时候配置下，这个很操蛋。
+     * @param id
+     * @param prifix
+     * @return
+     */
     public boolean canCache(Long id, String prifix) {
         String key = CACHEING_PRIFIX + prifix + "::" + id;
         while (stringRedisTemplate.hasKey(key)) {
