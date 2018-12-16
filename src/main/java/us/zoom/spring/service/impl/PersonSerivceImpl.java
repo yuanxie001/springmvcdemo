@@ -22,8 +22,13 @@ public class PersonSerivceImpl implements PersonSerivce {
 
     @Autowired
     private CacheControl cacheControl;
+
+    public CacheControl cacheControl(){
+        return cacheControl;
+    }
+
     @Override
-    @Cacheable(value = "person",key = "#id",condition = "#cacheControl.canCache(#id,'person')")
+    @Cacheable(value = "person",key = "#id",condition = "#root.target.cacheControl().canCache(#id,'person')")
     @TimeCountEnable
     public PersonDO getPersonById(Long id) {
         PersonDO personDO = personDOMapperExt.selectByPrimaryKey(id);
