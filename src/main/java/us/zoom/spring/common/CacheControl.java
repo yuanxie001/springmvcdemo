@@ -17,7 +17,15 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
+import java.util.concurrent.TimeUnit;
 
+/*
+*
+ * 用aop实现缓存的强一致性处理。
+ *
+ * 因为我们一般情况下，在处理缓存和db双写的时候，先删缓存和先更新db都会存在脏数据的可能性。首先我们来分析下这两种情况的发生：
+ * 1、先删缓存：先删缓存的情况下，
+*/
 @Aspect
 @Component
 public class CacheControl {
@@ -73,7 +81,7 @@ public class CacheControl {
             }
         }
         ValueOperations<String, String> stringStringValueOperations = stringRedisTemplate.opsForValue();
-        stringStringValueOperations.set(key,VALUE);
+        stringStringValueOperations.set(key,VALUE,100, TimeUnit.SECONDS);
         Object proceed = proceedingJoinPoint.proceed(args);
         stringRedisTemplate.delete(key);
         return proceed;
