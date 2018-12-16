@@ -34,6 +34,7 @@ public class PersonSerivceImpl implements PersonSerivce {
 
     @Override
     @Transactional(propagation= Propagation.REQUIRED)
+    // value作为key的前缀的。beforeInvocation的参数控制删除缓存的行为是在调用之前还是之后。key是控制获取缓存的逻辑的。这里的意思是第一个参数的id属性值。
     @CacheEvict(value = "person",beforeInvocation = false,key = "#p0.id")
     public PersonDO updatePerson(PersonDO personDO) {
         int i = personDOMapperExt.updateByPrimaryKeySelective(personDO);
