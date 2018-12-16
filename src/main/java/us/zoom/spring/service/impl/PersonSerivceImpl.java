@@ -37,6 +37,7 @@ public class PersonSerivceImpl implements PersonSerivce {
 
     @Override
     @Transactional(propagation= Propagation.REQUIRED)
+    @CacheEvict(value = "person",beforeInvocation = false,key = "#personDO.id")
     public PersonDO savePerson(PersonDO personDO) {
         personDO.setIsDelete("N");
         personDO.setCreateTime(new Date());
