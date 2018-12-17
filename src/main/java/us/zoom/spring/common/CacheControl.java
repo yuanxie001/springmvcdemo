@@ -82,7 +82,8 @@ public class CacheControl {
             }
             BeanWrapper beanWrapper = PropertyAccessorFactory.forBeanPropertyAccess(args[0]);
             Object id = beanWrapper.getPropertyValue("id");
-            //这步是解决插入时id为空删除缓存的情形
+            // 这步是解决插入时id为空删除缓存的情形
+            // 这是一种解决方案，另外一种是用CachePut注解。这种更加合适。
             if (id == null){
                 Object proceed = proceedingJoinPoint.proceed(args);
                 return proceed;
