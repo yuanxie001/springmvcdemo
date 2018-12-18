@@ -1,5 +1,6 @@
 package us.zoom.spring.service.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -33,6 +34,10 @@ public class PersonSerivceImpl implements PersonSerivce {
     @TimeCountEnable
     public PersonDO getPersonById(Long id) {
         PersonDO personDO = personDOMapperExt.selectByPrimaryKey(id);
+        String isDelete = personDO.getIsDelete();
+        if (StringUtils.equals(isDelete,"Y")){
+            return null;
+        }
         return personDO;
     }
 
@@ -46,12 +51,13 @@ public class PersonSerivceImpl implements PersonSerivce {
         return personDO;
     }
 
+    // value作为key的前缀的,beforeInvocation的参数控制删除缓存的行为是在调用之前还是之后
+    // key是控制获取缓存的逻辑的,这里的意思是第一个参数的id属性值
     @Override
     @Transactional(propagation= Propagation.REQUIRED)
-    // value作为key的前缀的。beforeInvocation的参数控制删除缓存的行为是在调用之前还是之后。key是控制获取缓存的逻辑的。这里的意思是第一个参数的id属性值。
     @CacheEvict(value = "person",beforeInvocation = false,key = "#personDO.id")
     @TimeCountEnable
-    public PersonDO updatePerson(PersonDO personDO) {
+    public PersonDO updatePerson(PersonDO personDO){
         int i = personDOMapperExt.updateByPrimaryKeySelective(personDO);
         return personDO;
     }
