@@ -53,5 +53,5 @@ spring:
           max-idle: 8
     cache:
       redis:
-        time-to-live: 3600s # redis过期时间设置。这样缓存可以
+        time-to-live: 6h # redis过期时间设置。这样缓存可以
 
