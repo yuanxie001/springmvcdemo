@@ -59,4 +59,4 @@ spring:
       mongodb:
         host: 47.96.72.250
         port: 27017
-        database: log
+        database: store
