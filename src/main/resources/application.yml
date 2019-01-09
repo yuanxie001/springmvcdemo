@@ -66,5 +66,5 @@ management:
   endpoints:
     web:
       base-path: /actuator
-  security:
-    enabled: false
+      exposure: # 只有开启这个才算开启了监控. 不然,默认只有info和health暴露的.需要注意
+        include: [ info , health ,beans,env , metrics ]
