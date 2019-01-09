@@ -60,3 +60,11 @@ spring:
         host: 47.96.72.250
         port: 27017
         database: store
+management:
+  server:
+    port: 8080
+  endpoints:
+    web:
+      base-path: /actuator
+  security:
+    enabled: false
