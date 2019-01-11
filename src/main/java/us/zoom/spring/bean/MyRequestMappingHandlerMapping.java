@@ -8,36 +8,44 @@ import java.util.Map;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import us.zoom.spring.common.annonation.MethodRegister;
 
-
-
+@Component
 public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
 
-	
-	
+	@Override
+	public int getOrder() {
+		return super.getOrder()-1;
+	}
+
 	@Override
 	public void afterPropertiesSet() {
 		super.afterPropertiesSet();
 		Map<RequestMappingInfo, HandlerMethod> handlerMethods = getHandlerMethods();
-		List<RequestMappingInfo> requestMappingInfos = new ArrayList<>();
-		for(Map.Entry<RequestMappingInfo, HandlerMethod> entry:handlerMethods.entrySet()) {
-			HandlerMethod handlerMethod = entry.getValue();
-			Method method = handlerMethod.getMethod();
-			if (!canRegister(method)) {
-				RequestMappingInfo requestMappingInfo = entry.getKey();
-				requestMappingInfos.add(requestMappingInfo);
-			}
-		}
-		for (RequestMappingInfo requestMappingInfo : requestMappingInfos) {
-			unregisterMapping(requestMappingInfo);
-		}
+        filterRequestMappings(handlerMethods);
 		
 	}
 
-	private boolean canRegister(Method method) {
+    protected void filterRequestMappings(Map<RequestMappingInfo, HandlerMethod> handlerMethods) {
+        List<RequestMappingInfo> requestMappingInfos = new ArrayList<>();
+        for(Map.Entry<RequestMappingInfo, HandlerMethod> entry:handlerMethods.entrySet()) {
+            HandlerMethod handlerMethod = entry.getValue();
+            Method method = handlerMethod.getMethod();
+            RequestMappingInfo requestMappingInfo = entry.getKey();
+            if (!canRegister(method)) {
+                requestMappingInfos.add(requestMappingInfo);
+            }
+        }
+        for (RequestMappingInfo requestMappingInfo : requestMappingInfos) {
+            unregisterMapping(requestMappingInfo);
+        }
+    }
+
+    private boolean canRegister(Method method) {
 		MethodRegister annotation = AnnotationUtils.findAnnotation(method, MethodRegister.class);
 		if (annotation == null) {
 			return true;

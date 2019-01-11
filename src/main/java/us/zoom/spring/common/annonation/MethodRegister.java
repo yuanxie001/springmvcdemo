@@ -1,11 +1,11 @@
-package us.zoom.spring.bean;
+package us.zoom.spring.common.annonation;
 
 import java.lang.annotation.*;
 
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@interface MethodRegister {
+public @interface MethodRegister {
     /**
      * if beanfactory match bean of class.
      * the MethodHandle will be register mapping to spring mvc.
