@@ -7,6 +7,8 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -129,24 +131,14 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
         // 这个方法是控制注册逻辑的另外一种思路.这边是在方法查找的时候做过滤的.
         // 这个思路更加灵活,但是也有自己的问题.就是每次请求都要遍历所有的mapping,上面只有启动的时候匹配所有的mapping
         HandlerMethod handlerMethod = super.lookupHandlerMethod(lookupPath, request);
-        if (CollectionUtils.isEmpty(disableUri)){
+        if (CollectionUtils.isEmpty(disableUri)) {
             // 这段可以处理对uri的配置信息的处理.读取配置,在这里做uri路径匹配校验处理.
             // 没有读取到就不做处理
-            Map<RequestMappingInfo, HandlerMethod> handlerMethods = getHandlerMethods();
-            Optional<Map.Entry<RequestMappingInfo, HandlerMethod>> handlerMethodEntryOptional = handlerMethods.entrySet().stream().filter(handler -> handlerMethod.equals(handler.getValue())).findAny();
-            if (handlerMethodEntryOptional.isPresent()) {
-                Map.Entry<RequestMappingInfo, HandlerMethod> requestMappingInfoHandlerMethodEntry = handlerMethodEntryOptional.get();
-                RequestMappingInfo requestMappingInfo = requestMappingInfoHandlerMethodEntry.getKey();
-                PatternsRequestCondition patternsCondition = requestMappingInfo.getPatternsCondition();
-                List<String> matchingPatterns = patternsCondition.getMatchingPatterns(lookupPath);
-                if (matchingPatterns != null || matchingPatterns.size() == 0 || matchingPatterns.size() > 1) {
-                    throw new RuntimeException("匹配mapping出错");
-                }
-                String matchUri = matchingPatterns.get(0);
-                if (matchUri.contains(matchUri)) {
-                    return null;
-                }
-                return handlerMethod;
+            RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+            String bestPattern = (String) requestAttributes.getAttribute(BEST_MATCHING_PATTERN_ATTRIBUTE, RequestAttributes.SCOPE_REQUEST);
+
+            if (disableUri.contains(bestPattern)) {
+                return null;
             }
         }
         // 处理方法,如果有这个注解,则过滤掉.

@@ -67,4 +67,4 @@ management:
     web:
       base-path: /actuator
       exposure: # 只有开启这个才算开启了监控. 不然,默认只有info和health暴露的.需要注意
-        include: [ info , health ,beans,env , metrics ]
+        include: [ info , health ,beans, env,metrics,mappings ]
