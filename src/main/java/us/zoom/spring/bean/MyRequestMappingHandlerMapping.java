@@ -4,6 +4,8 @@ import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.expression.Expression;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.CollectionUtils;
@@ -12,6 +14,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import us.zoom.spring.common.annonation.CustomGroup;
 import us.zoom.spring.common.annonation.CustomMethod;
 import us.zoom.spring.common.annonation.MethodRegister;
 
@@ -23,6 +26,7 @@ import java.util.*;
 public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
 
     private Set<String> disableUri;
+    private SpelExpressionParser spelExpressionParser = new SpelExpressionParser();
 
     @Override
     public int getOrder() {
@@ -37,15 +41,16 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
         super.afterPropertiesSet();
         Map<RequestMappingInfo, HandlerMethod> handlerMethods = getHandlerMethods();
         filterRequestMappings(handlerMethods);
-        doWithChangeMethod(handlerMethods);
+        processChangeMethod(handlerMethods);
     }
 
-    private void doWithChangeMethod(Map<RequestMappingInfo, HandlerMethod> handlerMethods) {
+    private void processChangeMethod(Map<RequestMappingInfo, HandlerMethod> handlerMethods) {
         ApplicationContext applicationContext = getApplicationContext();
         Map<RequestMappingInfo, HandlerMethod> changeMethodMap = new HashMap<>();
         for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : handlerMethods.entrySet()) {
             HandlerMethod handlerMethod = entry.getValue();
-            CustomMethod customMethod = AnnotationUtils.findAnnotation(handlerMethod.getMethod(), CustomMethod.class);
+            CustomMethod customMethod = getCustomAnnotation(handlerMethod.getMethod());
+            // customMethod 为null表示不存在定制方法处理，不需要处理这个逻辑
             if (customMethod == null) {
                 continue;
             }
@@ -61,6 +66,43 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
                 registerMapping(entry.getKey(), bean, method);
             }
         }
+    }
+
+    /**
+     * 匹配方法上在当前环境下可以使用的定制方法
+     * @param method
+     * @return 方法上使用的注解，匹配到的结果
+     */
+    private CustomMethod getCustomAnnotation(Method method) {
+        //查看方法上有没有对应的注解。如果有CustomMethod，则先处理CustomMethod的注解
+        CustomMethod annotation = AnnotationUtils.findAnnotation(method, CustomMethod.class);
+        CustomGroup customGroup = AnnotationUtils.findAnnotation(method, CustomGroup.class);
+        // 如果两个注解都不存在方法上，则返回空，表示不存在定制
+        if (annotation == null && customGroup == null) {
+            return null;
+        }
+        // 存在这个方法上的CustomMethod，用spel表达式校验这个方法是否匹配当前环境。匹配则返回
+        if (annotation != null) {
+            Expression expression = spelExpressionParser.parseExpression(annotation.condition());
+            Boolean isMatch = expression.getValue(Boolean.class);
+            if (isMatch) {
+                return annotation;
+            }
+        }
+        // 如果一个方法存在多个定制的时候，走这个逻辑。下面的spel表达式用于匹配这个定制方法在当前环境是否生效问题。
+        // 生效则返回那个注解，不生效则继续查看下一个。
+        if (customGroup != null) {
+            CustomMethod[] customMethods = customGroup.value();
+            for (CustomMethod cm : customMethods) {
+                Expression expression = spelExpressionParser.parseExpression(cm.condition());
+                Boolean isMatch = expression.getValue(Boolean.class);
+                if (isMatch) {
+                    return cm;
+                }
+            }
+        }
+        // 上面注解都不生效的时候，返回null，表示不存在定制方法，不需要重新注册
+        return null;
     }
 
     protected void filterRequestMappings(Map<RequestMappingInfo, HandlerMethod> handlerMethods) {

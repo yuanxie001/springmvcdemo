@@ -1,8 +1,13 @@
 package us.zoom.spring.common.annonation;
 
+import java.lang.annotation.*;
+
 /**
  * 定制化注解,用于替换处理requestMapping方法的实现.
  */
+@Target({ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
 public @interface CustomMethod {
     /**
      * 判断是否替换的条件.
