@@ -10,7 +10,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import us.zoom.spring.common.annonation.CustomMethod;
@@ -27,7 +26,10 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
 
     @Override
     public int getOrder() {
-        return super.getOrder() - 1;
+        // RequestMappingHandlerMapping 的默认值不是最小值,而是0,所以这里写-1,
+        // 表示在系统自带的RequestMappingHandlerMapping之前执行.
+        // 不直接替换是因为替换报错.不能为两个id相同的bean
+        return -1;
     }
 
     @Override
@@ -135,8 +137,11 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
             // 这段可以处理对uri的配置信息的处理.读取配置,在这里做uri路径匹配校验处理.
             // 没有读取到就不做处理
             RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-            String bestPattern = (String) requestAttributes.getAttribute(BEST_MATCHING_PATTERN_ATTRIBUTE, RequestAttributes.SCOPE_REQUEST);
-
+            Object attribute = requestAttributes.getAttribute(BEST_MATCHING_PATTERN_ATTRIBUTE, RequestAttributes.SCOPE_REQUEST);
+            if (attribute == null) {
+                throw new RuntimeException("匹配消息出错,最佳匹配无效");
+            }
+            String bestPattern = (String) attribute;
             if (disableUri.contains(bestPattern)) {
                 return null;
             }
