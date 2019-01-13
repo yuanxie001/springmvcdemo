@@ -6,9 +6,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
-import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
-import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.method.HandlerMethod;
@@ -22,12 +21,20 @@ import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.*;
 
-@Component
-public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
 
-    private Set<String> disableUri;
+
+public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping{
+
+    private String disableUri;
     private SpelExpressionParser spelExpressionParser = new SpelExpressionParser();
 
+    public String getDisableUri() {
+        return disableUri;
+    }
+
+    public void setDisableUri(String disableUri) {
+        this.disableUri = disableUri;
+    }
     @Override
     public int getOrder() {
         // RequestMappingHandlerMapping 的默认值不是最小值,而是0,所以这里写-1,
@@ -117,7 +124,6 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
                 // 不能注册添加到移除注册信息里面去.
                 removeRequestMappingInfos.add(requestMappingInfo);
             }
-            registerHandlerMethod(handlerMethod.getBean(), method, requestMappingInfo);
         }
         for (RequestMappingInfo requestMappingInfo : removeRequestMappingInfos) {
             unregisterMapping(requestMappingInfo);
@@ -175,7 +181,10 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
         // 这个方法是控制注册逻辑的另外一种思路.这边是在方法查找的时候做过滤的.
         // 这个思路更加灵活,但是也有自己的问题.就是每次请求都要遍历所有的mapping,上面只有启动的时候匹配所有的mapping
         HandlerMethod handlerMethod = super.lookupHandlerMethod(lookupPath, request);
-        if (CollectionUtils.isEmpty(disableUri)) {
+        if (!StringUtils.isEmpty(disableUri)) {
+            String[] split = disableUri.split(",");
+            Set<String> disableUriSet = new HashSet<>(Arrays.asList(split));
+
             // 这段可以处理对uri的配置信息的处理.读取配置,在这里做uri路径匹配校验处理.
             // 没有读取到就不做处理
             RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
@@ -184,7 +193,7 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
                 throw new RuntimeException("匹配消息出错,最佳匹配无效");
             }
             String bestPattern = (String) attribute;
-            if (disableUri.contains(bestPattern)) {
+            if (disableUriSet.contains(bestPattern)) {
                 return null;
             }
         }
