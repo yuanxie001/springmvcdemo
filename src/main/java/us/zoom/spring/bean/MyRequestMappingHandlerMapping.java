@@ -22,7 +22,10 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 
-
+/**
+ * 自己实现的requestmappinghandlermapping的逻辑。用于替换已有方法和注册以前的方法.
+ * 除去order的设置是因为已经实现替换原有的requestmapping的逻辑，不需要在进行处理了
+ */
 public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping{
 
     private String disableUri;
@@ -35,13 +38,6 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
     public void setDisableUri(String disableUri) {
         this.disableUri = disableUri;
     }
-    @Override
-    public int getOrder() {
-        // RequestMappingHandlerMapping 的默认值不是最小值,而是0,所以这里写-1,
-        // 表示在系统自带的RequestMappingHandlerMapping之前执行.
-        // 不直接替换是因为替换报错.不能为两个id相同的bean
-        return -1;
-    }
 
     @Override
     public void afterPropertiesSet() {
@@ -51,7 +47,11 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
         processChangeMethod(handlerMethods);
     }
 
-    private void processChangeMethod(Map<RequestMappingInfo, HandlerMethod> handlerMethods) {
+    /**
+     * 处理方法替换的逻辑，requestmapping方法的动态替换。不需要修改代码。
+     * @param handlerMethods
+     */
+    protected void processChangeMethod(Map<RequestMappingInfo, HandlerMethod> handlerMethods) {
         ApplicationContext applicationContext = getApplicationContext();
         Map<RequestMappingInfo, HandlerMethod> changeMethodMap = new HashMap<>();
         for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : handlerMethods.entrySet()) {
@@ -70,6 +70,7 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
             }
             Method method = ClassUtils.getMethod(beanType, methodName, methodParamtersClass);
             if (method != null) {
+                unregisterMapping(entry.getKey());
                 registerMapping(entry.getKey(), bean, method);
             }
         }
