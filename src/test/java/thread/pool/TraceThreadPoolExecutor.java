@@ -5,6 +5,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.*;
 
+/**
+ * 测试线程池 用来捕获多线程里面发生的异常以及产生异常的任务是哪个线程在哪提交的.
+ */
 public class TraceThreadPoolExecutor extends ThreadPoolExecutor{
     private static final Logger logger = LoggerFactory.getLogger(TraceThreadPoolExecutor.class);
 
