@@ -7,6 +7,9 @@ import java.util.concurrent.*;
 
 /**
  * 测试线程池 用来捕获多线程里面发生的异常以及产生异常的任务是哪个线程在哪提交的.
+ *
+ * CompletableFuture也能实现类似的将多线程中出现的异常抓取出来.然后抛出来.但获取不到异常任务提交的点.所以还是没这个好用.
+ * 这个记录的信息更加详细.出现异常更能捕获解决.
  */
 public class TraceThreadPoolExecutor extends ThreadPoolExecutor{
     private static final Logger logger = LoggerFactory.getLogger(TraceThreadPoolExecutor.class);
@@ -28,7 +31,6 @@ public class TraceThreadPoolExecutor extends ThreadPoolExecutor{
             try {
                 task.run();
             }catch (Exception e){
-
                 logger.error("client stack:",clientStack);
                 logger.error("task stack:",e);
                 throw e;
