@@ -10,6 +10,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 有优先级的生产者消费者模型.
+ */
 class PriorititedTask implements Runnable, Comparable<PriorititedTask> {
     private Random random = new Random(47);
     private static int counter = 0;
@@ -129,6 +132,7 @@ public class PriorityBlockingQueueDemo {
     public static void main(String[] args) {
         ExecutorService executorService = Executors.newCachedThreadPool();
         PriorityBlockingQueue<Runnable> queue= new PriorityBlockingQueue<>();
+        // 只有单个生产者和消费者
         executorService.execute(new PrioritizedTaskProducer(queue,executorService));
         executorService.execute(new PrioritizedTaskConsumer(queue));
     }
