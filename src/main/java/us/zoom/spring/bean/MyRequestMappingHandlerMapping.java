@@ -1,5 +1,7 @@
 package us.zoom.spring.bean;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.BeanFactoryUtils;
@@ -21,6 +23,7 @@ import us.zoom.spring.common.annonation.CustomMethod;
 import us.zoom.spring.common.annonation.MethodRegister;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,6 +37,7 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
 
     private String disableUri;
     private SpelExpressionParser spelExpressionParser = new SpelExpressionParser();
+    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public String getDisableUri() {
         return disableUri;
