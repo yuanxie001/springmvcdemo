@@ -217,20 +217,21 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
 
         RequestMappingInfo mappingForMethod = super.getMappingForMethod(method, handlerType);
 
-        // Check if this class extends a super. and that super is annotated with @Controller.
+        // 检测一个类继承自一个超类,并且超类被@Controller.注解修饰
         Class superClass = handlerType.getSuperclass();
 
         if (superClass.isAnnotationPresent(Controller.class)) {
-            // We have a super class controller.
+            // 我们有一个超类被Controller修饰的
 
             if (handlerType.isAnnotationPresent(Primary.class)) {
-                // We have a @Primary on the child.
+                // 并且有一个子类被@Primary修饰.返回这个子类方法.
+                // 这个是handlerType为子类的情况.
                 return mappingForMethod;
             }
         } else {
-            // We do not have a super class, therefore we need to look for other implementations of this class.
+            // 没有超类, 因此我们需要查找其他实现关于这个类. 获取当前applicationContext里所有被Controller修饰的类
             Map<String, Object> controllerBeans = getApplicationContext().getBeansWithAnnotation(Controller.class);
-
+            // 取得这个类的所有子类.
             List<Map.Entry<String, Object>> classesExtendingHandler = controllerBeans.entrySet().stream().filter(e ->
                     AopUtils.getTargetClass(e.getValue()).getSuperclass().getName().equalsIgnoreCase(handlerType
                             .getName()) &&
@@ -239,12 +240,12 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
 
 
             if (classesExtendingHandler == null || classesExtendingHandler.isEmpty()) {
-                // No classes extend this handler, therefore it is the only one.
+                // 没有子类的情况.这个handlerType是唯一的.则使用.
                 return mappingForMethod;
             } else {
-                // Classes extend this handler,
+                // 有子类继承这个handler,
 
-                // If this handler is marked with @Primary and no others are then return info;
+                // 查找所有的子类,找出被Primary修饰的那个;
                 List<Map.Entry<String, Object>> classesWithPrimary = classesExtendingHandler
                         .stream()
                         .filter(e -> e.getValue().getClass().isAnnotationPresent(Primary.class) &&
@@ -252,18 +253,17 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
                                         (handlerType.getName()))
                         .collect(Collectors.toList());
                 if (classesWithPrimary == null || classesWithPrimary.isEmpty()) {
-                    // No classes are marked with primary.
+                    // 没有子类被@Primary修饰,则返回空.表示没有匹配到.
                     return null;
                 } else {
-                    // One or more classes are marked with @Primary,
-
+                    // 有一个子类或多个子类被@Primary修饰,
                     if (classesWithPrimary.size() == 1 && AopUtils.getTargetClass(classesWithPrimary.get(0).getValue
                             ()).getClass().getName().equalsIgnoreCase(handlerType.getName())) {
                         // We have only one and it is this one, return it.
                         return mappingForMethod;
                     } else if (classesWithPrimary.size() == 1 && !AopUtils.getTargetClass(classesWithPrimary.get(0)
                             .getValue()).getClass().getName().equalsIgnoreCase(handlerType.getName())) {
-                        // Nothing.
+                        // 有子类实现的情况下,父类进来会走这里.表示注册过了.不用处理.等待子类处理.
                     } else {
                         // nothing.
                     }
@@ -271,12 +271,10 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
             }
         }
 
-
-
         // If it does, and it is marked with @Primary, then return info.
 
         // else If it does not extend a super with @Controller and there are no children, then return info;
-
+        // 返回为null表示这个方法被过滤掉.不用注册.
         return null;
     }
 }
