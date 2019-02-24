@@ -1,11 +1,16 @@
 package us.zoom.spring.bean;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
@@ -18,8 +23,10 @@ import us.zoom.spring.common.annonation.CustomMethod;
 import us.zoom.spring.common.annonation.MethodRegister;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -30,6 +37,7 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
 
     private String disableUri;
     private SpelExpressionParser spelExpressionParser = new SpelExpressionParser();
+    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public String getDisableUri() {
         return disableUri;
@@ -203,4 +211,71 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
         boolean canRegister = canRegister(method);
         return canRegister ? handlerMethod : null;
     }
+
+    @Override
+    protected RequestMappingInfo getMappingForMethod(Method method, Class<?> handlerType) {
+
+        RequestMappingInfo mappingForMethod = super.getMappingForMethod(method, handlerType);
+
+        // 检测一个类继承自一个超类,并且超类被@Controller.注解修饰
+        Class superClass = handlerType.getSuperclass();
+
+        if (superClass.isAnnotationPresent(Controller.class)) {
+            // 我们有一个超类被Controller修饰的
+
+            if (handlerType.isAnnotationPresent(Primary.class)) {
+                // 并且有一个子类被@Primary修饰.返回这个子类方法.
+                // 这个是handlerType为子类的情况.
+                return mappingForMethod;
+            }
+        } else {
+            // 没有超类, 因此我们需要查找其他实现关于这个类. 获取当前applicationContext里所有被Controller修饰的类
+            Map<String, Object> controllerBeans = getApplicationContext().getBeansWithAnnotation(Controller.class);
+            // 取得这个类的所有子类.
+            List<Map.Entry<String, Object>> classesExtendingHandler = controllerBeans.entrySet().stream().filter(e ->
+                    AopUtils.getTargetClass(e.getValue()).getSuperclass().getName().equalsIgnoreCase(handlerType
+                            .getName()) &&
+                            !AopUtils.getTargetClass(e.getValue()).getName().equalsIgnoreCase(handlerType.getName()))
+                    .collect(Collectors.toList());
+
+
+            if (classesExtendingHandler == null || classesExtendingHandler.isEmpty()) {
+                // 没有子类的情况.这个handlerType是唯一的.则使用.
+                return mappingForMethod;
+            } else {
+                // 有子类继承这个handler,
+
+                // 查找所有的子类,找出被Primary修饰的那个;
+                List<Map.Entry<String, Object>> classesWithPrimary = classesExtendingHandler
+                        .stream()
+                        .filter(e -> e.getValue().getClass().isAnnotationPresent(Primary.class) &&
+                                !AopUtils.getTargetClass(e.getValue().getClass()).getName().equalsIgnoreCase
+                                        (handlerType.getName()))
+                        .collect(Collectors.toList());
+                if (classesWithPrimary == null || classesWithPrimary.isEmpty()) {
+                    // 没有子类被@Primary修饰,则返回空.表示没有匹配到.
+                    return null;
+                } else {
+                    // 有一个子类或多个子类被@Primary修饰,
+                    if (classesWithPrimary.size() == 1 && AopUtils.getTargetClass(classesWithPrimary.get(0).getValue
+                            ()).getClass().getName().equalsIgnoreCase(handlerType.getName())) {
+                        // We have only one and it is this one, return it.
+                        return mappingForMethod;
+                    } else if (classesWithPrimary.size() == 1 && !AopUtils.getTargetClass(classesWithPrimary.get(0)
+                            .getValue()).getClass().getName().equalsIgnoreCase(handlerType.getName())) {
+                        // 有子类实现的情况下,父类进来会走这里.表示注册过了.不用处理.等待子类处理.
+                    } else {
+                        // nothing.
+                    }
+                }
+            }
+        }
+
+        // If it does, and it is marked with @Primary, then return info.
+
+        // else If it does not extend a super with @Controller and there are no children, then return info;
+        // 返回为null表示这个方法被过滤掉.不用注册.
+        return null;
+    }
 }
+
