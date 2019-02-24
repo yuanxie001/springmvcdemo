@@ -22,18 +22,18 @@ public class TraceThreadPoolExecutor extends ThreadPoolExecutor{
         super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory, handler);
     }
 
-    private Exception clientTrace(){
-        return new Exception("client stack trace");
+    private RuntimeException clientTrace(){
+        return new RuntimeException("client stack trace");
     }
 
-    public Runnable warp(final Runnable task,final Exception clientStack,String clientThreadName){
+    public Runnable warp(final Runnable task,final RuntimeException clientStack,String clientThreadName){
         return ()->{
             try {
                 task.run();
             }catch (Exception e){
+                clientStack.initCause(e);
                 logger.error("client stack:",clientStack);
-                logger.error("task stack:",e);
-                throw e;
+                throw clientStack;
             }
         };
     }
