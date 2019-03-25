@@ -1,5 +1,6 @@
 package spring.priority;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
