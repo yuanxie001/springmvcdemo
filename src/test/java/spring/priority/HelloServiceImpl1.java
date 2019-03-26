@@ -8,7 +8,6 @@ import javax.annotation.Priority;
 
 @Service
 @Priority(1)
-//@Order(1)
 public class HelloServiceImpl1 implements HelloService {
     @Override
     public String sayHello() {

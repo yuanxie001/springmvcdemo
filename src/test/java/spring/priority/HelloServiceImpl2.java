@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Priority;
 
-@Priority(2)
+@Priority(1)
 @Service
 //@Order(2)
 public class HelloServiceImpl2 implements HelloService {
