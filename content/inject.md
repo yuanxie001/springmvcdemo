@@ -52,20 +52,20 @@ public class Client {
 ```
 
 我们分六个case验证这几个注解和不加时的默认优先级问题(默认都加@Service注解).
-case1: HelloService的三个实现类都不加@Primary和@Priority注解.
-case2: HelloService的三个实现类中,HelloServiceImpl加@Primary注解,其他不加
-case3: HelloService的三个实现类中,HelloServiceImpl和HelloServiceImpl1都加@Primary注解,
-case4: HelloService的三个实现类中,HelloServiceImpl1和HelloServiceImpl2加@Priority注解,但里面设置的优先级不同.
-case5: HelloService的三个实现类中,HelloServiceImpl1和HelloServiceImpl2加@Priority注解,但里面设置的优先级相同.
-case6: HelloService的三个实现类中,HelloServiceImpl1和HelloServiceImpl2加@Priority注解,但里面设置的优先级不同.且HelloServiceImpl加@Primary注解
+- case1: HelloService的三个实现类都不加@Primary和@Priority注解.
+- case2: HelloService的三个实现类中,HelloServiceImpl加@Primary注解,其他不加
+- case3: HelloService的三个实现类中,HelloServiceImpl和HelloServiceImpl1都加@Primary注解,
+- case4: HelloService的三个实现类中,HelloServiceImpl1和HelloServiceImpl2加@Priority注解,但里面设置的优先级不同.
+- case5: HelloService的三个实现类中,HelloServiceImpl1和HelloServiceImpl2加@Priority注解,但里面设置的优先级相同.
+- case6: HelloService的三个实现类中,HelloServiceImpl1和HelloServiceImpl2加@Priority注解,但里面设置的优先级不同.且HelloServiceImpl加@Primary注解
 
 测试结果如下:
-case1:抛错,提示三个候选bean,NoUniqueBeanDefinitionException: No qualifying bean of type 'spring.priority.HelloService' available: expected single matching bean but found 3
-case2:正常输出:I'm no priority
-case3:抛错,提示存在多个@Primary注解的bean实例,NoUniqueBeanDefinitionException: No qualifying bean of type 'spring.priority.HelloService' available: more than one 'primary' bean found among candidates
-case4:正常输出:I'm priority 1
-case5:抛错,存在多个优先级是1的实例:NoUniqueBeanDefinitionException: No qualifying bean of type 'spring.priority.HelloService' available: Multiple beans found with the same priority ('1') among candidates
-case6:正常输出,I'm no priority
+1. case1:抛错,提示三个候选bean,NoUniqueBeanDefinitionException: No qualifying bean of type 'spring.priority.HelloService' available: expected single matching bean but found 3
+1. case2:正常输出:I'm no priority
+1. case3:抛错,提示存在多个@Primary注解的bean实例,NoUniqueBeanDefinitionException: No qualifying bean of type 'spring.priority.HelloService' available: more than one 'primary' bean found among candidates
+1. case4:正常输出:I'm priority 1
+1. case5:抛错,存在多个优先级是1的实例:NoUniqueBeanDefinitionException: No qualifying bean of type 'spring.priority.HelloService' available: Multiple beans found with the same priority ('1') among candidates
+1. case6:正常输出,I'm no priority
 
 主要判断流程如下图所示:
 ![多个候选bean的处理逻辑](image/bean_inject.jpg)
