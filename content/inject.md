@@ -71,4 +71,14 @@ public class Client {
 
 ![多个候选bean的处理逻辑](image/bean_inject.jpg)
 
+总结来说:
+- 当只有一个候选bean的是,就直接返回.
+- 存在多个的时候,则先判断有没有@Primary注解.有则有@Primary注解的逻辑.
+- 存在多个@Primary注解的bean,则抛错
+- 不存在@Primary的时候,查看存不存在@Priority注解.
+- 如果只有一个@Priority注解的时候,则返回.
+- 存在多个@Priority注解的时候,比较注解value值的大小,越小的优先级越高
+- 存在多个@Priority,并且最高优先级相同的,则抛错
+- 如果都不存在这两个注解,则抛错.
+
 以上就是多个候选bean时spring的判断逻辑.
