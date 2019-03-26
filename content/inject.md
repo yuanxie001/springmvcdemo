@@ -68,6 +68,7 @@ public class Client {
 1. case6:正常输出,I'm no priority
 
 主要判断流程如下图所示:
+
 ![多个候选bean的处理逻辑](image/bean_inject.jpg)
 
 以上就是多个候选bean时spring的判断逻辑.
