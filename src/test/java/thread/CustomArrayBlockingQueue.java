@@ -40,6 +40,7 @@ public class CustomArrayBlockingQueue<E> extends ArrayBlockingQueue<E> {
             this.put(o);
         } catch (InterruptedException e) {
             logger.error("offer queue is error.",e);
+            return false;
         }
         return true;
     }
