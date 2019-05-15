@@ -51,6 +51,7 @@ spring:
         pool:
           max-active: 8
           max-idle: 8
+      password: 123456
     cache:
       redis:
         time-to-live: 6h # redis过期时间设置。这样缓存可以
