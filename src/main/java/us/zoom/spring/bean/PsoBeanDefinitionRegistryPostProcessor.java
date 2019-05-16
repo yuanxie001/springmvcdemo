@@ -26,7 +26,7 @@ public class PsoBeanDefinitionRegistryPostProcessor implements BeanDefinitionReg
         String[] beanNames = registry.getBeanDefinitionNames();
         Map<Class, String> classBeanNameHashMap = new HashMap<>(beanNames.length);
         ClassLoader classLoader = getClass().getClassLoader();
-        // step.1 general bean name and bean class map.
+        // step.1 遍历所有的bean name,获取bean class和bean name匹配的map
         for (String beanName:beanNames) {
             BeanDefinition beanDefinition = registry.getBeanDefinition(beanName);
             String beanClassName = beanDefinition.getBeanClassName();
@@ -60,7 +60,7 @@ public class PsoBeanDefinitionRegistryPostProcessor implements BeanDefinitionReg
                 classBeanNameHashMap.put(beanClass,beanName);
             }
         }
-        // step.2 find all bean super class also as bean in this applicationContext.find the super class bean name
+        // step.2 找出所有自己在容器中,并且父类也在容器中的情况.将父类的bean name加到需要移除的列表中
         List<String> removeBeanDefinitionList = new ArrayList<>();
         Set<Map.Entry<Class, String>> entrySet = classBeanNameHashMap.entrySet();
         for (Map.Entry<Class,String> entry:entrySet) {
@@ -71,7 +71,7 @@ public class PsoBeanDefinitionRegistryPostProcessor implements BeanDefinitionReg
                 removeBeanDefinitionList.add(beanName);
             }
         }
-        // step.3 remove super class bean name.
+        // step.3 从注册中移除所有的父类bean.
         logger.info("remove bean,size:{},bean names:{}",removeBeanDefinitionList.size(),removeBeanDefinitionList);
         removeBeanDefinitionList.forEach(beanName -> {
             if (registry.containsBeanDefinition(beanName)){
