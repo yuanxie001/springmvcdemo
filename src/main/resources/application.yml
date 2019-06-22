@@ -37,8 +37,8 @@ spring:
       suffix: .ftl
       template-loader-path: classpath:/templates/
     mybatis:
-      mapper-locations: classpath:us.zoom.spring.mapper/*.xml  #注意：一定要对应mapper映射xml文件的所在路径
-      type-aliases-package: us.zoom.spring.domian  # 注意：对应实体类的路径
+      mapper-locations: classpath:store.xiaolan.spring.mapper/*.xml  #注意：一定要对应mapper映射xml文件的所在路径
+      type-aliases-package: store.xiaolan.spring.domian  # 注意：对应实体类的路径
     jackson:
       date-format: yyyy-MM-dd
       time-zone: GMT+8

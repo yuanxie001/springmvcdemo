@@ -6,5 +6,8 @@
 -- To change this template use File | Settings | File Templates.
 --
 
-redis.call("ping")
-
+local tables myArray={"redis","jedis",true,8.0 }
+for i = 1, #myArray
+do
+    print(myArray[i])
+end

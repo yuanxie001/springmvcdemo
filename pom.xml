@@ -171,11 +171,15 @@
             <artifactId>aspectjweaver</artifactId>
             <version>1.9.2</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.google.instrumentation/instrumentation-api -->
         <dependency>
             <groupId>com.google.instrumentation</groupId>
             <artifactId>instrumentation-api</artifactId>
             <version>0.4.3</version>
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>3.0.1</version>
         </dependency>
 
     </dependencies>
