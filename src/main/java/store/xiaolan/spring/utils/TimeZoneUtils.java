@@ -48,14 +48,7 @@ public class TimeZoneUtils {
         if (timeZone == null ) {
             timeZone = TimeZone.getTimeZone("GMT");
         }
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
-        LocalDateTime localDateTime = LocalDateTime.parse(time, formatter);
-        ZoneId zoneId = timeZone.toZoneId();
-        ZonedDateTime zonedDateTime = localDateTime.atZone(zoneId);
-        OffsetDateTime offsetDateTime = zonedDateTime.toOffsetDateTime();
-        ZonedDateTime gmt = offsetDateTime.atZoneSameInstant(ZoneId.of("GMT"));
-        return gmt.format(formatter);
+        return toGmt(time,format,timeZone.getID());
     }
     
     public static void main(String[] args) {
