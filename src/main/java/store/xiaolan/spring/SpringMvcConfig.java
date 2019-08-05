@@ -97,11 +97,11 @@ public class SpringMvcConfig implements WebMvcConfigurer,WebMvcRegistrations {
         resourceBundleMessageSource.setBasename("i18n/test");
         return resourceBundleMessageSource;
     }
-
-    @Override
-    public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
-        MyRequestMappingHandlerMapping myRequestMappingHandlerMapping = new MyRequestMappingHandlerMapping();
-        myRequestMappingHandlerMapping.setDisableUri(disableUir);
-        return myRequestMappingHandlerMapping;
-    }
+//    因为这个逻辑不需要了.所以取消注册自定义的request mapping handler mapping.
+//    @Override
+//    public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
+//        MyRequestMappingHandlerMapping myRequestMappingHandlerMapping = new MyRequestMappingHandlerMapping();
+//        myRequestMappingHandlerMapping.setDisableUri(disableUir);
+//        return myRequestMappingHandlerMapping;
+//    }
 }
