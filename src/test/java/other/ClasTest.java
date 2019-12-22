@@ -1,10 +1,37 @@
 package other;
 
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class ClasTest {
     public static void main(String[] args) {
-        int i;
-        for (i=0;i<100;i++){
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        List<String> dateStrList = Arrays.asList(
+                "2018-04-01 10:00:01",
+                "2018-04-02 11:00:02",
+                "2018-04-03 12:00:03",
+                "2018-04-04 13:00:04",
+                "2018-04-05 14:00:05"
+        );
 
+        ThreadLocal<SimpleDateFormat> simpleDateFormatThreadLocal = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"));
+
+        for (String str : dateStrList) {
+
+            executorService.execute(() -> {
+                SimpleDateFormat simpleDateFormat = simpleDateFormatThreadLocal.get();
+                Date parse            = null;
+                try {
+                    parse = simpleDateFormat.parse(str);
+                } catch (Exception e){
+                    System.out.println(e.getCause().getMessage());
+                }
+                System.out.println(parse);
+            });
         }
     }
 

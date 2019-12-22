@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 /**
  * 通过拦截rest template来讲多个spring  cloud程序进行单机部署.完成全部功能.
  */
-@Component("restTemplate")
+
 public class MyRestTemplate extends RestTemplate implements InitializingBean {
 
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
