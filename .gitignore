@@ -4,3 +4,8 @@
 *.class
 *.iml
 *.project
+/*.ipr
+/*.iws
+/.ideaDataSources/
+.ideaDataSources/
+
