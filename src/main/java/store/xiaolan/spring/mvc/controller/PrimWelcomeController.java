@@ -5,8 +5,7 @@ import org.springframework.stereotype.Controller;
 
 import javax.servlet.http.HttpServletRequest;
 
-@Controller
-@Primary
+
 public class PrimWelcomeController extends WelComeController {
     @Override
     public Object index(HttpServletRequest request){
