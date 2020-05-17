@@ -1,0 +1,7 @@
+#配置日志配置文件的位置
+logging:
+    config: classpath:logback.xml
+    path: /tmp/test/
+#配置端口号
+server:
+    port: 80
