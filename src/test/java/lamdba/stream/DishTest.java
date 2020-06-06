@@ -95,8 +95,10 @@ public class DishTest {
     @Test
     public void testGroup(){
         //long count = menu.stream().count();
-        Map<Dish.Type, List<Dish>> map = menu.stream().collect(Collectors.groupingBy(Dish::getType));
-        System.out.println(map);
+//        Map<Dish.Type, List<Dish>> map = menu.stream().collect(Collectors.groupingBy(Dish::getType));
+        // 添加分组后转换的case
+        Map<Dish.Type, List<Integer>> collect = menu.stream().collect(Collectors.groupingBy(Dish::getType, Collectors.mapping(Dish::getCalories, Collectors.toList())));
+        System.out.println(collect);
     }
 
     /**

@@ -11,8 +11,11 @@ public class ReativeController {
     @GetMapping("/test")
     public Flux<String> getList(){
         Flux<String> just = Flux.just("zoom", "teams", "google meet", "webx", "message room");
+
         return just;
     }
+
+
 
 
 
