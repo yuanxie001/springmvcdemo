@@ -36,6 +36,15 @@ public class LocalDateTest {
     }
     @Test
     public void test(){
+        LocalDate date = LocalDate.now();
+        int year = date.getYear();
+        Month month = date.getMonth();
+        int monthValue = date.getMonthValue();
+        int dayOfMonth = date.getDayOfMonth();
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+        int dayOfYear = date.getDayOfYear();
+        int i = date.lengthOfMonth();
+        boolean leapYear = date.isLeapYear();
 
     }
 

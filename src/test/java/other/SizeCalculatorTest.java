@@ -1,14 +1,14 @@
 package other;
 
-import jdk.nashorn.internal.ir.debug.ObjectSizeCalculator;
+
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class SizeCalculatorTest {
     public static void main(String[] args) {
-        long objectSize = ObjectSizeCalculator.getObjectSize(new A());
-        System.out.println(objectSize);
+//        long objectSize = ObjectSizeCalculator.getObjectSize(new A());
+//        System.out.publicrintln(objectSize);
     }
 
     public static class A{

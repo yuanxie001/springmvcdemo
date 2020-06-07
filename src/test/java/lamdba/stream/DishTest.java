@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class DishTest {
 
@@ -90,15 +91,36 @@ public class DishTest {
 
 
     /**
-     * 分组
+     * 分组，分组后mapping
      */
     @Test
     public void testGroup(){
         //long count = menu.stream().count();
 //        Map<Dish.Type, List<Dish>> map = menu.stream().collect(Collectors.groupingBy(Dish::getType));
         // 添加分组后转换的case
-        Map<Dish.Type, List<Integer>> collect = menu.stream().collect(Collectors.groupingBy(Dish::getType, Collectors.mapping(Dish::getCalories, Collectors.toList())));
+        Map<Dish.Type, List<Integer>> collect = menu.stream().collect(Collectors.groupingBy(Dish::getType,
+                Collectors.mapping(Dish::getCalories, Collectors.toList())));
         System.out.println(collect);
+    }
+
+    /**
+     * 分组，分组后filter
+     */
+    @Test
+    public void testGroup11(){
+        //long count = menu.stream().count();
+//        Map<Dish.Type, List<Dish>> map = menu.stream().collect(Collectors.groupingBy(Dish::getType));
+        // 添加分组后转换的case
+//        Map<Dish.Type, List<Dish>> collect = menu.stream().collect(Collectors.groupingBy(Dish::getType,
+//                Collectors.filtering(d -> d.isVegetarian(),Collectors.toList())));
+//        System.out.println(collect);
+    }
+
+    @Test
+    public void testGroup1(){
+        // peek操作是用于检查流处理的各种问题，不会导致问题存在。
+        int sum = menu.stream().peek(t -> System.out.println(t.getName())).mapToInt(Dish::getCalories).sum();
+        System.out.println(sum);
     }
 
     /**
@@ -111,4 +133,31 @@ public class DishTest {
         Map<Dish.Type, Collection<Dish>> map= index.asMap();
         System.out.println(map);
     }
+
+    /**
+     * 用于实现flatmap计算多个组合的可能.
+     * 讲a从1到100，b也从1到100.计算勾股数的组合。
+     *
+     * 两种方案都是计算勾股数组合的点子，还是很有意思的
+     */
+    @Test
+    public void testFlatMap(){
+        // 方案1
+        IntStream.rangeClosed(1, 100).boxed().flatMap(
+                a -> IntStream.rangeClosed(a, 100).
+                        filter(b -> Math.sqrt(a * a + b * b) % 1 == 0).
+                        mapToObj(b -> new int[]{a, b, (int) Math.sqrt(a * a + b * b)})
+        ).peek(a -> System.out.println(Arrays.toString(a))).collect(Collectors.toList());
+
+        // 方案2： 方案二是需要是计算一次，但用了double的stream，返回总觉得奇怪。
+        List<double[]> result = IntStream.rangeClosed(1, 100).boxed().flatMap(
+                a -> IntStream.rangeClosed(a, 100).
+                        mapToObj(b -> new double[]{a, b, Math.sqrt(a * a + b * b)}).
+                        filter(arr -> arr[2] % 1 == 0)
+        )
+                .peek(a -> System.out.println(Arrays.toString(a)))
+                .collect(Collectors.toList());
+
+    }
+
 }
