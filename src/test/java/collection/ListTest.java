@@ -1,6 +1,8 @@
 package collection;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ListTest {
     public static void main(String[] args) {
@@ -11,14 +13,24 @@ public class ListTest {
 //        list.add("4");
 //        list.add("5");
 //
-//        for (String item : list) {
-//            if ("2".equals(item)) {
-//                list.remove(item);
-//            }
-//        }
+//
+//        ArrayList<String> list2 = new ArrayList<>();
+//        list2.add("1");
+//        list2.add("4");
+//        list2.add("6");
+//
+//        list2.retainAll(list);
+//
+//        System.out.println(list2);
 
-        String str = "abc";
-        String t = str;
-        System.out.println(str.startsWith(str));
+        String[] arr = new String[]{"1234","124",null,"012",null};
+        String t = Stream.of(arr).filter(s -> s != null).collect(Collectors.joining(","));
+        System.out.println(t);
+//        String str = "abc";
+//        String t = str;
+//        System.out.println(str.startsWith(str));
+
+
+
     }
 }
