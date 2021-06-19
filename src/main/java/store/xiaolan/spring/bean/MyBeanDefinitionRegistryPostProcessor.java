@@ -19,7 +19,7 @@ import java.util.*;
  * this class can remove super class bean from application. it can instead of @Primary
  */
 @Component
-public class PsoBeanDefinitionRegistryPostProcessor implements BeanDefinitionRegistryPostProcessor {
+public class MyBeanDefinitionRegistryPostProcessor implements BeanDefinitionRegistryPostProcessor {
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
