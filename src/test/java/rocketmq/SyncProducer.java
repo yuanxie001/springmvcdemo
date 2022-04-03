@@ -20,6 +20,7 @@ public class SyncProducer {
                 );
                 SendResult sendResult = producer.send(msg);
                 System.out.println(sendResult.toString());
+                msg.setKeys("123");
             }
         } catch (Exception e) {
             e.printStackTrace();
