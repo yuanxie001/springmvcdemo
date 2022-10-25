@@ -7,11 +7,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 @SpringBootApplication
 @MapperScan("store.xiaolan.spring.mapper")
 @EnableAspectJAutoProxy
 @EnableMongoRepositories(basePackages="store.xiaolan.spring.component")
+@EnableRedisHttpSession
 public class SpringBootConfig {
     public static void main(String[] args) {
         SpringApplicationBuilder builder = new SpringApplicationBuilder(SpringBootConfig.class).
