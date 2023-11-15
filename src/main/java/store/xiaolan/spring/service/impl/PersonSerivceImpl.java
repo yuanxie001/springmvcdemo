@@ -1,5 +1,6 @@
 package store.xiaolan.spring.service.impl;
 
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -14,7 +15,6 @@ import store.xiaolan.spring.domian.PersonDO;
 import store.xiaolan.spring.mapper.PersonDOMapperExt;
 import store.xiaolan.spring.service.PersonSerivce;
 
-import javax.annotation.Resource;
 import java.util.Date;
 
 @Service

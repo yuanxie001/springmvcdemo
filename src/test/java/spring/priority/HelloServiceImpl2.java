@@ -1,9 +1,9 @@
 package spring.priority;
 
+import jakarta.annotation.Priority;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Priority;
 
 @Priority(1)
 @Service

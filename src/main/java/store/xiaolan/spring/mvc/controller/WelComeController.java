@@ -1,5 +1,6 @@
 package store.xiaolan.spring.mvc.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
@@ -12,8 +13,6 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * 默认测试，主要用来测试获取初始化默认配置的地方在哪里

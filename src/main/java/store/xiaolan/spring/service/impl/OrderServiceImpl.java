@@ -1,11 +1,11 @@
 package store.xiaolan.spring.service.impl;
 
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import store.xiaolan.spring.component.OrderComponent;
 import store.xiaolan.spring.domian.Order;
 import store.xiaolan.spring.service.OrderService;
 
-import javax.annotation.Resource;
 import java.util.Optional;
 
 @Service

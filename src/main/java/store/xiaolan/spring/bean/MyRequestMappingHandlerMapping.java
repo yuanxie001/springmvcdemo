@@ -1,5 +1,6 @@
 package store.xiaolan.spring.bean;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.support.AopUtils;
@@ -22,7 +23,7 @@ import store.xiaolan.spring.common.annonation.MethodRegister;
 import store.xiaolan.spring.common.annonation.CustomGroup;
 import store.xiaolan.spring.common.annonation.CustomMethod;
 
-import javax.servlet.http.HttpServletRequest;
+
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 import java.util.*;

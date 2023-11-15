@@ -1,9 +1,9 @@
 package store.xiaolan.spring.mvc.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Controller;
 
-import javax.servlet.http.HttpServletRequest;
 
 
 public class PrimWelcomeController extends WelComeController {
