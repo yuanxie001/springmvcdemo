@@ -22,15 +22,15 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <pso>alibaba</pso>
-        <logback.version>1.2.3</logback.version>
-        <jackson.version>2.10.3</jackson.version>
+        <logback.version>1.2.6</logback.version>
+        <jackson.version>2.14.0-rc1</jackson.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>4.13.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -87,13 +87,7 @@
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
-            <version>3.4.6</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.51</version>
+            <version>3.5.6</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -125,7 +119,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.47</version>
+            <version>8.0.28</version>
         </dependency>
         <!-- 配置格式化jar -->
         <dependency>
@@ -152,7 +146,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>18.0</version>
+            <version>32.0.0-android</version>
             <scope>test</scope>
         </dependency>
         <!-- 配置上传下载组件 -->
@@ -196,24 +190,24 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.1.29.Final</version>
+            <version>4.1.86.Final</version>
         </dependency>
         <dependency>
             <groupId>org.apache.rocketmq</groupId>
             <artifactId>rocketmq-client</artifactId>
-            <version>4.6.0</version>
+            <version>4.7.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.rocketmq</groupId>
             <artifactId>rocketmq-all</artifactId>
-            <version>4.6.0</version>
+            <version>5.1.1</version>
             <type>pom</type>
         </dependency>
 
         <dependency>
             <groupId>org.elasticsearch</groupId>
             <artifactId>elasticsearch</artifactId>
-            <version>7.8.0</version>
+            <version>8.11.4</version>
         </dependency>
         <!-- elasticsearch的客户端 -->
         <dependency>
@@ -280,7 +274,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-war-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.4.0</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-install-plugin</artifactId>
