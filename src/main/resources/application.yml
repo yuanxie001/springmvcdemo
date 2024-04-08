@@ -9,58 +9,56 @@ server:
 #配置数据源
 spring:
   datasource:
-        driverClassName: com.mysql.jdbc.Driver
-        password: tiger
+        driverClassName: com.mysql.cj.jdbc.Driver
+        password: 123456
         url: jdbc:mysql://192.168.31.10:3306/niuke?useUnicode=true&autoReconnect=true&characterEncoding=utf-8
-        username: scott
+        username: root
         type: com.alibaba.druid.pool.DruidDataSource
-
-    #配置mvc相关东西
-    mvc:
-        servlet:
-            load-on-startup: 1
-        # 处理请求可以被静态资源处理器拦截的url路径。
-        static-path-pattern: /**
+  mvc:
+      servlet:
+          load-on-startup: 1
+      # 处理请求可以被静态资源处理器拦截的url路径。
+      static-path-pattern: /**
     # 标注静态资源存放在项目的路径
     # 如果静态路径中有多层，则都会映射到目录的文件夹中
   profiles:
         active: local
-    freemarker:
-      allow-request-override: false
-      allow-session-override: false
-      cache: false
-      charset: UTF-8
-      check-template-location: true
-      enabled: true
-      content-type: text/html
-      prefer-file-system-access: true
-      suffix: .ftl
-      template-loader-path: classpath:/templates/
-    mybatis:
-      mapper-locations: classpath:store.xiaolan.spring.mapper/*.xml  #注意：一定要对应mapper映射xml文件的所在路径
-      type-aliases-package: store.xiaolan.spring.domian  # 注意：对应实体类的路径
-    jackson:
-      date-format: yyyy-MM-dd
-      time-zone: GMT+8
-      serialization:
-        write-dates-as-timestamps: false
-    redis:
-      host: 192.168.31.10
-      port: 6379
-      jedis:
-        pool:
-          max-active: 8
-          max-idle: 8
+  freemarker:
+    allow-request-override: false
+    allow-session-override: false
+    cache: false
+    charset: UTF-8
+    check-template-location: true
+    enabled: true
+    content-type: text/html
+    prefer-file-system-access: true
+    suffix: .ftl
+    template-loader-path: classpath:/templates/
+  mybatis:
+    mapper-locations: classpath:store.xiaolan.spring.mapper/*.xml  #注意：一定要对应mapper映射xml文件的所在路径
+    type-aliases-package: store.xiaolan.spring.domian  # 注意：对应实体类的路径
+  jackson:
+    date-format: yyyy-MM-dd
+    time-zone: GMT+8
+    serialization:
+      write-dates-as-timestamps: false
+  redis:
+    host: 192.168.31.10
+    port: 6379
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 8
       #password: 123456
-    cache:
-      redis:
-        time-to-live: 6h # redis过期时间设置。这样缓存可以
-        cache-null-values: true
-    data:
-      mongodb:
-        host: 192.168.137.242
-        port: 27017
-        database: store
+  cache:
+    redis:
+      time-to-live: 6h # redis过期时间设置。这样缓存可以
+      cache-null-values: true
+  data:
+    mongodb:
+      host: 192.168.137.242
+      port: 27017
+      database: store
   web:
     resources:
       static-locations: classpath:/static/
@@ -72,6 +70,3 @@ management:
       base-path: /actuator
       exposure: # 只有开启这个才算开启了监控. 不然,默认只有info和health暴露的.需要注意
         include: [ info , health ,beans, env,metrics,mappings ]
-nacos:
-  config:
-    endpoint:
