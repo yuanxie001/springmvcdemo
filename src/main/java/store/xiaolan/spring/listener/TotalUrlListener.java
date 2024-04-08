@@ -10,6 +10,7 @@ import org.springframework.web.context.support.ServletRequestHandledEvent;
 
 import java.lang.invoke.MethodHandles;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -21,19 +22,21 @@ public class TotalUrlListener {
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     @Autowired
     private StringRedisTemplate redisTemplate;
-    private static final String CACHE_KEY_PREFIX = "count_{}";
+    private static final String CACHE_KEY_PREFIX = "count_";
 
     // 创建一个DateTimeFormatter对象，指定格式
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMddHHmm");
 
     @EventListener(ServletRequestHandledEvent.class)
-    public void onFlush(ServletRequestHandledEvent event){
+    public void onFlush(ServletRequestHandledEvent event) {
         String requestUrl = event.getRequestUrl();
         String method = event.getMethod();
         String clientAddress = event.getClientAddress();
-        String format = formatter.format(Instant.now());
-        String cacheKey = String.format(CACHE_KEY_PREFIX, format);
-        logger.info("请求方式为:{}.uri为:{},远程地址为:{}",method,requestUrl,clientAddress);
-        redisTemplate.opsForHash().increment(cacheKey,requestUrl,1);
+
+        LocalDateTime ldt1 = LocalDateTime.now();
+        String format = ldt1.format(formatter);
+        String cacheKey = CACHE_KEY_PREFIX + format;
+        logger.info("请求方式为:{}.uri为:{},远程地址为:{}", method, requestUrl, clientAddress);
+        redisTemplate.opsForHash().increment(cacheKey, requestUrl, 1);
     }
 }

@@ -15,10 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 import org.springframework.web.util.UrlPathHelper;
-import store.xiaolan.spring.bean.MyRequestMappingHandlerMapping;
 import store.xiaolan.spring.mvc.controller.interceptor.TestInterceptor;
 
 import java.util.HashMap;
@@ -86,9 +84,7 @@ public class SpringMvcConfig implements WebMvcConfigurer,WebMvcRegistrations {
         registry.enableContentNegotiation(true);
         Map<String, ViewResolver> stringViewResolverMap = BeanFactoryUtils.beansOfTypeIncludingAncestors(applicationContext, ViewResolver.class);
         Optional<ViewResolver> any = stringViewResolverMap.values().stream().filter(viewResolver -> viewResolver.getClass().equals(FreeMarkerViewResolver.class)).findAny();
-        if (any.isPresent()){
-            registry.viewResolver(any.get());
-        }
+        any.ifPresent(registry::viewResolver);
 
     }
     @Bean

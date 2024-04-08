@@ -42,23 +42,23 @@ spring:
     time-zone: GMT+8
     serialization:
       write-dates-as-timestamps: false
-  redis:
-    host: 192.168.31.10
-    port: 6379
-    jedis:
-      pool:
-        max-active: 8
-        max-idle: 8
-      #password: 123456
   cache:
     redis:
       time-to-live: 6h # redis过期时间设置。这样缓存可以
       cache-null-values: true
   data:
     mongodb:
-      host: 192.168.137.242
+      host: 192.168.31.10
       port: 27017
       database: store
+    redis:
+      host: 192.168.31.10
+      port: 6379
+      jedis:
+        pool:
+          max-active: 8
+          max-idle: 8
+        #password: 123456
   web:
     resources:
       static-locations: classpath:/static/
