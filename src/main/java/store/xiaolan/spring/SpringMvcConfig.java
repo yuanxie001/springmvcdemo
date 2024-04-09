@@ -17,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 import org.springframework.web.util.UrlPathHelper;
+import store.xiaolan.spring.component.id.SnowflakeIdGenerate;
 import store.xiaolan.spring.mvc.controller.interceptor.TestInterceptor;
 
 import java.util.HashMap;
@@ -93,6 +94,12 @@ public class SpringMvcConfig implements WebMvcConfigurer,WebMvcRegistrations {
         resourceBundleMessageSource.setBasename("i18n/test");
         return resourceBundleMessageSource;
     }
+
+    @Bean("snowflakeIdGenerate")
+    public SnowflakeIdGenerate getIdGenerate(@Value("${id-generator.machine-code:1}") Long machineCode) {
+        return new SnowflakeIdGenerate(machineCode);
+    }
+
 //    因为这个逻辑不需要了.所以取消注册自定义的request mapping handler mapping.
 //    @Override
 //    public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {

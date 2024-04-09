@@ -9,9 +9,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.ServletRequestHandledEvent;
 
 import java.lang.invoke.MethodHandles;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 /**
  * 一个事件监听器,监听request的请求处理. 可以做处理完之后的分析逻辑.比如处理url的监听逻辑,处理请求日志啥的.
@@ -38,5 +40,6 @@ public class TotalUrlListener {
         String cacheKey = CACHE_KEY_PREFIX + format;
         logger.info("请求方式为:{}.uri为:{},远程地址为:{}", method, requestUrl, clientAddress);
         redisTemplate.opsForHash().increment(cacheKey, requestUrl, 1);
+        redisTemplate.expire(cacheKey, Duration.of(30, ChronoUnit.MINUTES));
     }
 }
