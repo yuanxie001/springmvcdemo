@@ -8,4 +8,6 @@
 /*.iws
 /.ideaDataSources/
 .ideaDataSources/
+/venv
+/logs
 
