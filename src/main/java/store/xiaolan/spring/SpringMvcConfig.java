@@ -88,6 +88,12 @@ public class SpringMvcConfig implements WebMvcConfigurer,WebMvcRegistrations {
         any.ifPresent(registry::viewResolver);
 
     }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/api/**");
+    }
+
     @Bean
     public MessageSource messageSource(){
         ReloadableResourceBundleMessageSource resourceBundleMessageSource = new ReloadableResourceBundleMessageSource();

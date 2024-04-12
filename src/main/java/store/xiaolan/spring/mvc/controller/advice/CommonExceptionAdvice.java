@@ -1,4 +1,4 @@
-package store.xiaolan.spring.mvc.controller.controller.advice;
+package store.xiaolan.spring.mvc.controller.advice;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -8,13 +8,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.ModelAndView;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice
-public class CommonAdvice {
+public class CommonExceptionAdvice {
+
+    public static final String errorMsg = "errorMethod:{0}#{1},errorMSg:{2}";
     /**
      * 异常解析捕获，可以捕获本类中抛出的所有指定类型的异常。
      * ResponseStatus注解放在捕获异常的方法上，可以自定义异常在返回时的状态码
@@ -26,13 +28,9 @@ public class CommonAdvice {
     @ResponseBody
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public Object handlerException(NullPointerException exception, HandlerMethod method) {
-
-        String name1 = method.getBeanType().getName();
-        Map map = new HashMap();
-        map.put("error", exception.getMessage());
-        map.put("method_bean", name1);
-        map.put("method_name", method.getMethod().getName());
-        return map;
+        String beanName = method.getBeanType().getName();
+        String msg = MessageFormat.format(errorMsg, beanName, method.getMethod().getName(), exception.getMessage());
+        return ResultData.fail(500, msg);
     }
 
     /**
@@ -47,10 +45,11 @@ public class CommonAdvice {
     @ExceptionHandler(value = RuntimeException.class)
     @ResponseBody
     //@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR,reason = "校验错误")
-    public Object handlerRuntimeExcetion(RuntimeException runtimeExecption, HttpServletRequest request, HttpServletResponse response) {
-        Map map = new HashMap();
-        map.put("error", runtimeExecption.getMessage());
+    public Object handlerRuntimeExcetion(RuntimeException runtimeExecption, HandlerMethod method,
+                                         HttpServletRequest request, HttpServletResponse response) {
+        String beanName = method.getBeanType().getName();
+        String msg = MessageFormat.format(errorMsg, beanName, method.getMethod().getName(), runtimeExecption.getMessage());
         response.setStatus(HttpStatus.SERVICE_UNAVAILABLE.value());
-        return map;
+        return ResultData.fail(500, msg);
     }
 }

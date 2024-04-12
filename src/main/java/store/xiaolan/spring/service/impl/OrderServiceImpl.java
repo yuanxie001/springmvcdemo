@@ -7,8 +7,9 @@ import store.xiaolan.spring.component.id.SnowflakeIdGenerate;
 import store.xiaolan.spring.domian.Order;
 import store.xiaolan.spring.service.OrderService;
 
-import java.time.Instant;
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,9 +37,15 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order getOrder(Long id) {
         Optional<Order> optionalOrder = orderComponent.findById(id);
-        if (optionalOrder.isPresent()){
-            return optionalOrder.get();
-        }
-        return null;
+        return optionalOrder.orElse(null);
+    }
+    @Override
+    public List<Order> listOrder(String name) {
+        return orderComponent.findByName(name);
+    }
+
+    @Override
+    public List<Order> listOrderByNameAndPrice(String name, BigDecimal price) {
+        return orderComponent.findByNameAndPrice(name,price);
     }
 }
