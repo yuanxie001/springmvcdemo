@@ -12,7 +12,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 @SpringBootApplication
 @MapperScan("store.xiaolan.spring.mapper")
 @EnableAspectJAutoProxy
-@EnableMongoRepositories(basePackages="store.xiaolan.spring.component")
+@EnableMongoRepositories(basePackages="store.xiaolan.spring.component.mongo")
 @EnableRedisHttpSession
 public class SpringBootConfig {
     public static void main(String[] args) {

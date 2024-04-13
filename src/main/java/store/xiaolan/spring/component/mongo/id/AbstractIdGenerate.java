@@ -1,4 +1,4 @@
-package store.xiaolan.spring.component.id;
+package store.xiaolan.spring.component.mongo.id;
 
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;

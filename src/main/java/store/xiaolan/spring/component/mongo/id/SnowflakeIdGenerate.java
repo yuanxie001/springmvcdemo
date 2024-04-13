@@ -1,4 +1,4 @@
-package store.xiaolan.spring.component.id;
+package store.xiaolan.spring.component.mongo.id;
 
 
 public class SnowflakeIdGenerate extends AbstractIdGenerate<Long> {

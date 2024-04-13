@@ -2,8 +2,8 @@ package store.xiaolan.spring.service.impl;
 
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
-import store.xiaolan.spring.component.OrderComponent;
-import store.xiaolan.spring.component.id.SnowflakeIdGenerate;
+import store.xiaolan.spring.component.mongo.OrderComponent;
+import store.xiaolan.spring.component.mongo.id.SnowflakeIdGenerate;
 import store.xiaolan.spring.domian.Order;
 import store.xiaolan.spring.service.OrderService;
 

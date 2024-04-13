@@ -1,7 +1,5 @@
 package store.xiaolan.spring;
 
-
-import org.apache.commons.io.input.CharacterSetFilterReader;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +18,7 @@ import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 import org.springframework.web.util.UrlPathHelper;
-import store.xiaolan.spring.component.id.SnowflakeIdGenerate;
+import store.xiaolan.spring.component.mongo.id.SnowflakeIdGenerate;
 import store.xiaolan.spring.mvc.controller.interceptor.TestInterceptor;
 
 import java.util.HashMap;
@@ -43,7 +41,7 @@ public class SpringMvcConfig implements WebMvcConfigurer,WebMvcRegistrations {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(testInterceptor).addPathPatterns("/g*").excludePathPatterns("/gt*");
+        registry.addInterceptor(testInterceptor).addPathPatterns("/*").excludePathPatterns("/gt*");
         registry.addInterceptor(new LocaleChangeInterceptor());
     }
     /**
