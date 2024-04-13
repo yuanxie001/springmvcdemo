@@ -6,7 +6,7 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="country" jdbcType="VARCHAR" property="country" />
-    <result column="lanauge" jdbcType="VARCHAR" property="lanauge" />
+    <result column="language" jdbcType="VARCHAR" property="language" />
     <result column="zone" jdbcType="VARCHAR" property="zone" />
     <result column="birthday" jdbcType="TIMESTAMP" property="birthday" />
     <result column="is_delete" jdbcType="CHAR" property="isDelete" />
@@ -72,7 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, address, country, lanauge, zone, birthday, is_delete, create_time, modified_time
+    id, name, address, country, language, zone, birthday, is_delete, create_time, modified_time
   </sql>
   <select id="selectByExample" parameterType="store.xiaolan.spring.domian.PersonDOExample" resultMap="BaseResultMap">
     select
@@ -106,22 +106,22 @@
     </if>
   </delete>
   <insert id="insert" parameterType="store.xiaolan.spring.domian.PersonDO">
-    <selectKey keyProperty="id" order="AFTER" resultType="Long">
+    <!--<selectKey keyProperty="id" order="AFTER" resultType="Long">
       SELECT LAST_INSERT_ID()
-    </selectKey>
+    </selectKey>-->
     insert into person_info (name, address, country, 
-      lanauge, zone, birthday, 
+      language, zone, birthday,
       is_delete, create_time, modified_time
       )
     values (#{name,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, 
-      #{lanauge,jdbcType=VARCHAR}, #{zone,jdbcType=VARCHAR}, #{birthday,jdbcType=TIMESTAMP}, 
+      #{language,jdbcType=VARCHAR}, #{zone,jdbcType=VARCHAR}, #{birthday,jdbcType=TIMESTAMP},
       #{isDelete,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="store.xiaolan.spring.domian.PersonDO">
-    <selectKey keyProperty="id" order="AFTER" resultType="Long">
+    <!--<selectKey keyProperty="id" order="AFTER" resultType="Long">
       SELECT LAST_INSERT_ID()
-    </selectKey>
+    </selectKey>-->
     insert into person_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="name != null">
@@ -133,8 +133,8 @@
       <if test="country != null">
         country,
       </if>
-      <if test="lanauge != null">
-        lanauge,
+      <if test="language != null">
+        language,
       </if>
       <if test="zone != null">
         zone,
@@ -162,8 +162,8 @@
       <if test="country != null">
         #{country,jdbcType=VARCHAR},
       </if>
-      <if test="lanauge != null">
-        #{lanauge,jdbcType=VARCHAR},
+      <if test="language != null">
+        #{language,jdbcType=VARCHAR},
       </if>
       <if test="zone != null">
         #{zone,jdbcType=VARCHAR},
@@ -203,8 +203,8 @@
       <if test="record.country != null">
         country = #{record.country,jdbcType=VARCHAR},
       </if>
-      <if test="record.lanauge != null">
-        lanauge = #{record.lanauge,jdbcType=VARCHAR},
+      <if test="record.language != null">
+        language = #{record.language,jdbcType=VARCHAR},
       </if>
       <if test="record.zone != null">
         zone = #{record.zone,jdbcType=VARCHAR},
@@ -232,7 +232,7 @@
       name = #{record.name,jdbcType=VARCHAR},
       address = #{record.address,jdbcType=VARCHAR},
       country = #{record.country,jdbcType=VARCHAR},
-      lanauge = #{record.lanauge,jdbcType=VARCHAR},
+      language = #{record.language,jdbcType=VARCHAR},
       zone = #{record.zone,jdbcType=VARCHAR},
       birthday = #{record.birthday,jdbcType=TIMESTAMP},
       is_delete = #{record.isDelete,jdbcType=CHAR},
@@ -254,8 +254,8 @@
       <if test="country != null">
         country = #{country,jdbcType=VARCHAR},
       </if>
-      <if test="lanauge != null">
-        lanauge = #{lanauge,jdbcType=VARCHAR},
+      <if test="language != null">
+        language = #{language,jdbcType=VARCHAR},
       </if>
       <if test="zone != null">
         zone = #{zone,jdbcType=VARCHAR},
@@ -280,7 +280,7 @@
     set name = #{name,jdbcType=VARCHAR},
       address = #{address,jdbcType=VARCHAR},
       country = #{country,jdbcType=VARCHAR},
-      lanauge = #{lanauge,jdbcType=VARCHAR},
+      language = #{language,jdbcType=VARCHAR},
       zone = #{zone,jdbcType=VARCHAR},
       birthday = #{birthday,jdbcType=TIMESTAMP},
       is_delete = #{isDelete,jdbcType=CHAR},

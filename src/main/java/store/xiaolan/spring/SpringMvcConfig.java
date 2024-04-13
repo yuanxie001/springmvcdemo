@@ -1,10 +1,12 @@
 package store.xiaolan.spring;
 
 
+import org.apache.commons.io.input.CharacterSetFilterReader;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.MediaType;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
@@ -43,7 +46,6 @@ public class SpringMvcConfig implements WebMvcConfigurer,WebMvcRegistrations {
         registry.addInterceptor(testInterceptor).addPathPatterns("/g*").excludePathPatterns("/gt*");
         registry.addInterceptor(new LocaleChangeInterceptor());
     }
-
     /**
      * 解决enable-matrix-variables=true,开启支持的问题。
      *
@@ -106,6 +108,17 @@ public class SpringMvcConfig implements WebMvcConfigurer,WebMvcRegistrations {
         return new SnowflakeIdGenerate(machineCode);
     }
 
+    @Bean
+    public FilterRegistrationBean<CharacterEncodingFilter> filterRegistrationBean(){
+        FilterRegistrationBean<CharacterEncodingFilter> filterBean = new FilterRegistrationBean<>();
+        CharacterEncodingFilter filter = new CharacterEncodingFilter();
+        /*将文本过滤器类注册到容器中*/
+        filter.setEncoding("utf-8");
+        filter.setForceEncoding(true);
+        filterBean.setFilter(filter);
+        filterBean.addUrlPatterns("/*");
+        return filterBean;
+    }
 //    因为这个逻辑不需要了.所以取消注册自定义的request mapping handler mapping.
 //    @Override
 //    public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {

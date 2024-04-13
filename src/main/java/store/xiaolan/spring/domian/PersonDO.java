@@ -13,7 +13,7 @@ public class PersonDO implements Serializable{
 
     private String country;
 
-    private String lanauge;
+    private String language;
 
     private String zone;
 
@@ -57,12 +57,12 @@ public class PersonDO implements Serializable{
         this.country = country == null ? null : country.trim();
     }
 
-    public String getLanauge() {
-        return lanauge;
+    public String getLanguage() {
+        return language;
     }
 
-    public void setLanauge(String lanauge) {
-        this.lanauge = lanauge == null ? null : lanauge.trim();
+    public void setLanguage(String language) {
+        this.language = language == null ? null : language.trim();
     }
 
     public String getZone() {

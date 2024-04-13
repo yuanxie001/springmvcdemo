@@ -1,0 +1,14 @@
+
+CREATE TABLE "public"."person_info" (
+	"id" int4 NOT NULL DEFAULT nextval( 'person_info_id_seq' :: regclass ),
+	"name" VARCHAR ( 100 ) COLLATE "pg_catalog"."default",
+	"address" VARCHAR ( 1024 ) COLLATE "pg_catalog"."default",
+	"country" VARCHAR ( 100 ) COLLATE "pg_catalog"."default",
+	"language" VARCHAR ( 100 ) COLLATE "pg_catalog"."default",
+	"zone" VARCHAR ( 100 ) COLLATE "pg_catalog"."default",
+	"is_delete" CHAR ( 1 ) COLLATE "pg_catalog"."default",
+	"birthday" TIMESTAMP ( 6 ),
+	"create_time" TIMESTAMP ( 6 ),
+	"modified_time" TIMESTAMP ( 6 ),
+	CONSTRAINT "person_info_pkey" PRIMARY KEY ( "id" )
+);

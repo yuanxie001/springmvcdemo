@@ -18,7 +18,7 @@ public class PersonVo {
 
     private String country;
 
-    private String lanauge;
+    private String langauge;
 
     private String zone;
     @DateTimeFormat(pattern="yyyy-MM-dd")
@@ -57,12 +57,12 @@ public class PersonVo {
         this.country = country;
     }
 
-    public String getLanauge() {
-        return lanauge;
+    public String getLangauge() {
+        return langauge;
     }
 
-    public void setLanauge(String lanauge) {
-        this.lanauge = lanauge;
+    public void setLangauge(String langauge) {
+        this.langauge = langauge;
     }
 
     public String getZone() {
