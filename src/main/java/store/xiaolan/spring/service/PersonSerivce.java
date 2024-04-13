@@ -13,4 +13,6 @@ public interface PersonSerivce {
     PersonDO savePerson(PersonDO personDO);
 
     PersonDO updatePerson(PersonDO personDO);
+
+    void deletePerson(Long id);
 }

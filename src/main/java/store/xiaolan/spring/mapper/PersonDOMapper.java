@@ -10,7 +10,7 @@ public interface PersonDOMapper {
 
     int deleteByExample(PersonDOExample example);
 
-    int deleteByPrimaryKey(Long id);
+    int deleteByPrimaryKey(@Param("id") Long id);
 
     int insert(PersonDO record);
 

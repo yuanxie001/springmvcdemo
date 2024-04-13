@@ -1,6 +1,7 @@
 package store.xiaolan.spring.service.impl;
 
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -18,6 +19,7 @@ import store.xiaolan.spring.service.PersonSerivce;
 import java.util.Date;
 
 @Service
+@Slf4j
 public class PersonSerivceImpl implements PersonSerivce {
     @Resource
     private PersonDOMapperExt personDOMapperExt;
@@ -25,7 +27,7 @@ public class PersonSerivceImpl implements PersonSerivce {
     @Autowired
     private CacheControl cacheControl;
 
-    public CacheControl cacheControl(){
+    public CacheControl cacheControl() {
         return cacheControl;
     }
 
@@ -43,9 +45,11 @@ public class PersonSerivceImpl implements PersonSerivce {
 
     @Override
     @Transactional(propagation= Propagation.REQUIRED)
+    @CacheEvict(value = "person",key = "#personDO.id")
     public PersonDO savePerson(PersonDO personDO) {
         personDO.setIsDelete("N");
         personDO.setCreateTime(new Date());
+        personDO.setModifiedTime(new Date());
         personDOMapperExt.insertSelective(personDO);
         return personDO;
     }
@@ -61,5 +65,14 @@ public class PersonSerivceImpl implements PersonSerivce {
         return personDO;
     }
 
-
+    @Override
+    @CacheEvict(value = "person", key = "#id")
+    public void deletePerson(Long id) {
+        try {
+            personDOMapperExt.deleteByPrimaryKey(id);
+        } catch (Exception e) {
+            log.error("delete error",e);
+            throw new RuntimeException(e);
+        }
+    }
 }

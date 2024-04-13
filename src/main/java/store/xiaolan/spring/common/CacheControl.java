@@ -13,11 +13,11 @@ import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
-import java.util.concurrent.TimeUnit;
+import java.math.BigDecimal;
+import java.util.Set;
 
 /*
  *
@@ -30,6 +30,7 @@ public class CacheControl {
     private final static Logger logger = LoggerFactory.getLogger(CacheControl.class);
     private final static String CACHEING_PRIFIX = "cache_create_";
     private final static String VALUE = "VALUE";
+    private final static Set<Class> IGNORE_ID_CLASS = Set.of(String.class, Integer.class,Long.class,int.class,long.class, BigDecimal.class);
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 
@@ -80,6 +81,12 @@ public class CacheControl {
             if (value.length > 0) {
                 key = CACHEING_PRIFIX + value[0] + "::";
             }
+
+            if (clsArray.length ==1 && IGNORE_ID_CLASS.contains(clsArray[0])) {
+                key = key + args[0];
+                return getObject(proceedingJoinPoint,annotation, key, args);
+            }
+
             BeanWrapper beanWrapper = PropertyAccessorFactory.forBeanPropertyAccess(args[0]);
             Object id = beanWrapper.getPropertyValue("id");
             // 这步是解决插入时id为空删除缓存的情形
@@ -92,10 +99,20 @@ public class CacheControl {
                 key = key + id;
             }
         }
-        ValueOperations<String, String> stringStringValueOperations = stringRedisTemplate.opsForValue();
-        stringStringValueOperations.set(key, VALUE, 100, TimeUnit.SECONDS);
+        return getObject(proceedingJoinPoint, annotation, key, args);
+    }
+
+    private Object getObject(ProceedingJoinPoint proceedingJoinPoint, CacheEvict annotation, String key, Object[] args) throws Throwable {
+        // 之前这个逻辑是为了防止并发读的case.但这样不就是导致直接操作db了嘛,和爽删没什么区别
+//        ValueOperations<String, String> stringStringValueOperations = stringRedisTemplate.opsForValue();
+//        stringStringValueOperations.set(key, VALUE, 100, TimeUnit.SECONDS);
+        if (annotation.beforeInvocation()) {
+            stringRedisTemplate.delete(key);
+        }
         Object proceed = proceedingJoinPoint.proceed(args);
-        stringRedisTemplate.delete(key);
+        if (!annotation.beforeInvocation()) {
+            stringRedisTemplate.delete(key);
+        }
         return proceed;
     }
 }

@@ -36,4 +36,10 @@ public class PersonInfoController {
         personVo.setId(person.getId());
         return personVo;
     }
+
+    @RequestMapping(value = "/{id}",method = RequestMethod.DELETE)
+    public Boolean deletePerson(@PathVariable("id")Long id){
+        personSerivce.deletePerson(id);
+        return true;
+    }
 }
