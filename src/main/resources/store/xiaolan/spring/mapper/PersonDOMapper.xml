@@ -118,7 +118,8 @@
       #{isDelete,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="store.xiaolan.spring.domian.PersonDO" useGeneratedKeys="true">
+  <insert id="insertSelective" parameterType="store.xiaolan.spring.domian.PersonDO"
+          keyProperty="id" useGeneratedKeys="true" keyColumn="id">
     <!--<selectKey keyProperty="id" order="AFTER" resultType="Long">
       SELECT LAST_INSERT_ID()
     </selectKey>-->

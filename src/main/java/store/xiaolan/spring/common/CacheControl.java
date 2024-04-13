@@ -25,7 +25,7 @@ import java.util.Set;
  *
  */
 @Aspect
-@Component
+//@Component
 public class CacheControl {
     private final static Logger logger = LoggerFactory.getLogger(CacheControl.class);
     private final static String CACHEING_PRIFIX = "cache_create_";

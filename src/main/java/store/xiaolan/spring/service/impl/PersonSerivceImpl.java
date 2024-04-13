@@ -24,12 +24,12 @@ public class PersonSerivceImpl implements PersonSerivce {
     @Resource
     private PersonDOMapperExt personDOMapperExt;
 
-    @Autowired
-    private CacheControl cacheControl;
-
-    public CacheControl cacheControl() {
-        return cacheControl;
-    }
+//    @Autowired
+//    private CacheControl cacheControl;
+//
+//    public CacheControl cacheControl() {
+//        return cacheControl;
+//    }
 
     @Override
     @Cacheable(value = "person",key = "#id")
@@ -45,7 +45,7 @@ public class PersonSerivceImpl implements PersonSerivce {
 
     @Override
     @Transactional(propagation= Propagation.REQUIRED)
-    @CacheEvict(value = "person",key = "#personDO.id")
+    @CacheEvict(value = "person",key = "#result.id")
     public PersonDO savePerson(PersonDO personDO) {
         personDO.setIsDelete("N");
         personDO.setCreateTime(new Date());
