@@ -34,13 +34,12 @@ import java.util.Optional;
 
 @Configuration
 @PropertySource("classpath:config.properties")
-public class SpringMvcConfig implements WebMvcConfigurer,WebMvcRegistrations {
+public class SpringMvcConfig implements WebMvcConfigurer, WebMvcRegistrations {
     @Autowired
     private TestInterceptor testInterceptor;
     @Autowired
     private ApplicationContext applicationContext;
-    @Value("${disable.uri}")
-    private String disableUir;
+
     /**
      * 添加拦截器支持
      *
@@ -55,10 +54,7 @@ public class SpringMvcConfig implements WebMvcConfigurer,WebMvcRegistrations {
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         WebMvcConfigurer.super.configureMessageConverters(converters);
-        Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder()
-                .indentOutput(true)
-                .dateFormat(new SimpleDateFormat("yyyy-MM-dd"))
-                .modulesToInstall(new ParameterNamesModule());
+        Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder().indentOutput(true).dateFormat(new SimpleDateFormat("yyyy-MM-dd")).modulesToInstall(new ParameterNamesModule());
         converters.add(new MappingJackson2HttpMessageConverter(builder.build()));
         converters.add(new MappingJackson2XmlHttpMessageConverter(builder.createXmlMapper(true).build()));
     }
@@ -83,9 +79,10 @@ public class SpringMvcConfig implements WebMvcConfigurer,WebMvcRegistrations {
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
         // 扩展名至mimeType的映射,即 /user.json => application/json
-        configurer.favorPathExtension(true);
+        // configurer.favorPathExtension(true);
         // 用于开启 /userinfo/123?format=json 的支持
         configurer.favorParameter(true);
+        configurer.parameterName("f");
         // 是否忽略Accept Header
         configurer.ignoreAcceptHeader(false);
         // 扩展名到MIME的映射；favorPathExtension, favorParameter是true时起作用
@@ -95,6 +92,7 @@ public class SpringMvcConfig implements WebMvcConfigurer,WebMvcRegistrations {
         configurer.mediaTypes(map);
         configurer.defaultContentType(MediaType.APPLICATION_JSON);
     }
+
 
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
@@ -114,7 +112,7 @@ public class SpringMvcConfig implements WebMvcConfigurer,WebMvcRegistrations {
     }
 
     @Bean
-    public MessageSource messageSource(){
+    public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource resourceBundleMessageSource = new ReloadableResourceBundleMessageSource();
         resourceBundleMessageSource.setBasename("i18n/test");
         return resourceBundleMessageSource;
@@ -126,7 +124,7 @@ public class SpringMvcConfig implements WebMvcConfigurer,WebMvcRegistrations {
     }
 
     @Bean
-    public FilterRegistrationBean<CharacterEncodingFilter> filterRegistrationBean(){
+    public FilterRegistrationBean<CharacterEncodingFilter> filterRegistrationBean() {
         FilterRegistrationBean<CharacterEncodingFilter> filterBean = new FilterRegistrationBean<>();
         CharacterEncodingFilter filter = new CharacterEncodingFilter();
         /*将文本过滤器类注册到容器中*/
