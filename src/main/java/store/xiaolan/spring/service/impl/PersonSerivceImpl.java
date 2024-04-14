@@ -73,6 +73,9 @@ public class PersonSerivceImpl implements PersonSerivce {
 
     @Override
     public List<PersonDO> queryByName(String name) {
+        if (StringUtils.isBlank(name)) {
+            return List.of();
+        }
         PersonDOExample example = new PersonDOExample();
         example.createCriteria().andNameEqualTo(name);
         return personDOMapperExt.selectByExample(example);
