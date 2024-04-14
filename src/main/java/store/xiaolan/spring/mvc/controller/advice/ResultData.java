@@ -1,10 +1,13 @@
 package store.xiaolan.spring.mvc.controller.advice;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import lombok.Data;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JacksonXmlRootElement(localName = "root")
 public class ResultData<T> {
     private T result;
     private boolean success;

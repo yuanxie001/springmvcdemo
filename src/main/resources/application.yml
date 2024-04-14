@@ -27,6 +27,7 @@ spring:
     static-path-pattern: /**
     # 标注静态资源存放在项目的路径
     # 如果静态路径中有多层，则都会映射到目录的文件夹中
+    publish-request-handled-events: false
   profiles:
     active: local
   freemarker:
