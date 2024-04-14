@@ -33,6 +33,9 @@ public class PersonSerivceImpl implements PersonSerivce {
     @TimeCountEnable
     public PersonDO getPersonById(Long id) {
         PersonDO personDO = personDOMapperExt.selectByPrimaryKey(id);
+        if (personDO == null) {
+            return null;
+        }
         String isDelete = personDO.getIsDelete();
         if (StringUtils.equals(isDelete,"Y")){
             return null;

@@ -15,6 +15,10 @@ public class PersonInfoController {
     @RequestMapping(value = "/{id}",method = RequestMethod.GET)
     public PersonVo getPerson(@PathVariable("id")Long id){
         PersonDO person = personSerivce.getPersonById(id);
+        if (person == null) {
+            return null;
+        }
+
         PersonVo personVo = new PersonVo();
         BeanUtils.copyProperties(person,personVo);
         return  personVo;
