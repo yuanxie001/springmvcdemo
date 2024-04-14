@@ -10,23 +10,18 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import store.xiaolan.spring.common.annonation.TimeCountEnable;
 import store.xiaolan.spring.domian.PersonDO;
+import store.xiaolan.spring.domian.PersonDOExample;
 import store.xiaolan.spring.mapper.PersonDOMapperExt;
 import store.xiaolan.spring.service.PersonSerivce;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Slf4j
 public class PersonSerivceImpl implements PersonSerivce {
     @Resource
     private PersonDOMapperExt personDOMapperExt;
-
-//    @Autowired
-//    private CacheControl cacheControl;
-//
-//    public CacheControl cacheControl() {
-//        return cacheControl;
-//    }
 
     @Override
     @Cacheable(value = "person",key = "#id")
@@ -74,5 +69,12 @@ public class PersonSerivceImpl implements PersonSerivce {
             log.error("delete error",e);
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<PersonDO> queryByName(String name) {
+        PersonDOExample example = new PersonDOExample();
+        example.createCriteria().andNameEqualTo(name);
+        return personDOMapperExt.selectByExample(example);
     }
 }

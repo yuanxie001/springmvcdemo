@@ -7,6 +7,8 @@ import store.xiaolan.spring.domian.PersonDO;
 import store.xiaolan.spring.service.PersonSerivce;
 import store.xiaolan.spring.mvc.vo.PersonVo;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/person")
 public class PersonInfoController {
@@ -45,5 +47,15 @@ public class PersonInfoController {
     public Boolean deletePerson(@PathVariable("id")Long id){
         personSerivce.deletePerson(id);
         return true;
+    }
+
+    @GetMapping("/list")
+    public List<PersonVo> listPerson(@RequestParam String name){
+        List<PersonDO> personDOS = personSerivce.queryByName(name);
+        return personDOS.stream().map(personDO -> {
+            PersonVo personVo = new PersonVo();
+            BeanUtils.copyProperties(personDO, personVo);
+            return personVo;
+        }).toList();
     }
 }
