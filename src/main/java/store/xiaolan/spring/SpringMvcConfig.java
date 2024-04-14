@@ -21,8 +21,10 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 import org.springframework.web.util.UrlPathHelper;
+import store.xiaolan.spring.bean.SupportExtRequestHandlerMapping;
 import store.xiaolan.spring.component.mongo.id.SnowflakeIdGenerate;
 import store.xiaolan.spring.mvc.controller.interceptor.TestInterceptor;
 
@@ -79,9 +81,10 @@ public class SpringMvcConfig implements WebMvcConfigurer, WebMvcRegistrations {
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
         // 扩展名至mimeType的映射,即 /user.json => application/json
-        // configurer.favorPathExtension(true);
+        configurer.favorPathExtension(true);
         // 用于开启 /userinfo/123?format=json 的支持
         configurer.favorParameter(true);
+        // 用于开启 /userinfo/123?f=json 的支持,替换format为f
         configurer.parameterName("f");
         // 是否忽略Accept Header
         configurer.ignoreAcceptHeader(false);
@@ -135,10 +138,9 @@ public class SpringMvcConfig implements WebMvcConfigurer, WebMvcRegistrations {
         return filterBean;
     }
 //    因为这个逻辑不需要了.所以取消注册自定义的request mapping handler mapping.
-//    @Override
-//    public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
-//        MyRequestMappingHandlerMapping myRequestMappingHandlerMapping = new MyRequestMappingHandlerMapping();
-//        myRequestMappingHandlerMapping.setDisableUri(disableUir);
-//        return myRequestMappingHandlerMapping;
-//    }
+    @Override
+    public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
+        SupportExtRequestHandlerMapping myRequestMappingHandlerMapping = new SupportExtRequestHandlerMapping();
+        return myRequestMappingHandlerMapping;
+    }
 }
