@@ -7,12 +7,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.MDC;
+import org.springframework.boot.web.servlet.filter.OrderedFilter;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.UUID;
 
-public class TrackingIdFilter extends OncePerRequestFilter {
+public class TrackingIdFilter extends OncePerRequestFilter implements OrderedFilter {
     private static final String TRACK_PREFIX = "WEB_";
     public static final String TRACKING_ID = "tracking-id";
 
@@ -26,5 +27,10 @@ public class TrackingIdFilter extends OncePerRequestFilter {
             MDC.put(TRACKING_ID,TRACK_PREFIX+s);
         }
         filterChain.doFilter(request,response);
+    }
+
+    @Override
+    public int getOrder() {
+        return Integer.MIN_VALUE + 1;
     }
 }
