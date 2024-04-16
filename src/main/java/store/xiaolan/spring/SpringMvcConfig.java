@@ -25,6 +25,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 import org.springframework.web.util.UrlPathHelper;
 import store.xiaolan.spring.bean.SupportExtRequestHandlerMapping;
+import store.xiaolan.spring.common.TrackingIdFilter;
 import store.xiaolan.spring.component.mongo.id.SnowflakeIdGenerate;
 import store.xiaolan.spring.mvc.controller.interceptor.TestInterceptor;
 
@@ -127,7 +128,16 @@ public class SpringMvcConfig implements WebMvcConfigurer, WebMvcRegistrations {
     }
 
     @Bean
-    public FilterRegistrationBean<CharacterEncodingFilter> filterRegistrationBean() {
+    public FilterRegistrationBean<TrackingIdFilter> trackingIdFilter() {
+        FilterRegistrationBean<TrackingIdFilter> filterBean = new FilterRegistrationBean<>();
+        TrackingIdFilter filter = new TrackingIdFilter();
+        filterBean.setFilter(filter);
+        filterBean.addUrlPatterns("/*");
+        return filterBean;
+    }
+
+    @Bean
+    public FilterRegistrationBean<CharacterEncodingFilter> encodingCharacterFilter() {
         FilterRegistrationBean<CharacterEncodingFilter> filterBean = new FilterRegistrationBean<>();
         CharacterEncodingFilter filter = new CharacterEncodingFilter();
         /*将文本过滤器类注册到容器中*/
