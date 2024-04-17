@@ -8,6 +8,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
+import store.xiaolan.spring.common.TrackingIdFilter;
 
 @SpringBootApplication
 @MapperScan("store.xiaolan.spring.mapper")
@@ -16,6 +17,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 @EnableRedisHttpSession
 public class SpringBootConfig {
     public static void main(String[] args) {
+        TrackingIdFilter.setTrackingId();
         SpringApplicationBuilder builder = new SpringApplicationBuilder(SpringBootConfig.class).
                 bannerMode(Banner.Mode.OFF).properties("spring.tet=123424");
         SpringApplication build = builder.build();

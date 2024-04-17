@@ -21,12 +21,20 @@ public class TrackingIdFilter extends OncePerRequestFilter implements OrderedFil
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String trackingId = MDC.get(TRACKING_ID);
         if (StringUtils.isEmpty(trackingId)) {
-            byte[] bytes = UUID.randomUUID().toString().substring(0,32).getBytes();
-            String s = Base64.encodeBase64URLSafeString(bytes);
-            s= s.split("=")[0];
-            MDC.put(TRACKING_ID,TRACK_PREFIX+s);
+            trackingId = setTrackingId();
         }
+        response.addHeader("X-WEB-TRACKING_ID",trackingId);
         filterChain.doFilter(request,response);
+    }
+
+    public static String setTrackingId() {
+        String trackingId;
+        byte[] bytes = UUID.randomUUID().toString().substring(0,32).getBytes();
+        String s = Base64.encodeBase64URLSafeString(bytes);
+        s= s.split("=")[0];
+        trackingId = TRACK_PREFIX+s;
+        MDC.put(TRACKING_ID,trackingId);
+        return trackingId;
     }
 
     @Override
