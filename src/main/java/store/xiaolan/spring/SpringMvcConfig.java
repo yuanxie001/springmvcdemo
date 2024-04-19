@@ -150,7 +150,6 @@ public class SpringMvcConfig implements WebMvcConfigurer, WebMvcRegistrations {
 //    因为这个逻辑不需要了.所以取消注册自定义的request mapping handler mapping.
     @Override
     public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
-        SupportExtRequestHandlerMapping myRequestMappingHandlerMapping = new SupportExtRequestHandlerMapping();
-        return myRequestMappingHandlerMapping;
+        return new SupportExtRequestHandlerMapping();
     }
 }

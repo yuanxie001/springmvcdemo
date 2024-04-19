@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.MDC;
@@ -13,6 +14,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.UUID;
 
+import static org.springframework.web.servlet.HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE;
+
+@Slf4j
 public class TrackingIdFilter extends OncePerRequestFilter implements OrderedFilter {
     private static final String TRACK_PREFIX = "WEB_";
     public static final String TRACKING_ID = "tracking-id";
@@ -25,6 +29,8 @@ public class TrackingIdFilter extends OncePerRequestFilter implements OrderedFil
         }
         response.addHeader("X-WEB-TRACKING_ID",trackingId);
         filterChain.doFilter(request,response);
+        Object bestUrl = request.getAttribute(BEST_MATCHING_PATTERN_ATTRIBUTE);
+        log.info("request url:{}",bestUrl);
     }
 
     public static String setTrackingId() {

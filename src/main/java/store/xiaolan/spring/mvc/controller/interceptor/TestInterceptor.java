@@ -8,17 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.support.ServletRequestHandledEvent;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.WebUtils;
 
 import java.security.Principal;
 import java.time.Instant;
 
+import static org.springframework.web.servlet.HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE;
 
 @Component
 @Order
@@ -28,7 +27,6 @@ public class TestInterceptor implements HandlerInterceptor {
     @Autowired
     private ApplicationContext applicationContext;
 
-    private static final String BEST_MATCHING_PATTERN_ATTRIBUTE = HandlerMapping.class.getName() + ".bestMatchingPattern";
     private static final String START_TIME = "handler_start_time";
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
