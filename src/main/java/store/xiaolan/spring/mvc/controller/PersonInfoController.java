@@ -78,7 +78,7 @@ public class PersonInfoController {
         }).toList();
     }
 
-    @GetMapping("/forward/{id}")
+    @GetMapping("/forward/**")
     public void forwardPerson(HttpServletRequest request,
                                 HttpServletResponse response) throws ServletException, IOException {
         String uri = request.getRequestURI().replace("/forward","");
@@ -89,22 +89,14 @@ public class PersonInfoController {
     public void includePerson(HttpServletRequest request,
                               HttpServletResponse response) throws ServletException, IOException {
         String uri = request.getRequestURI().replace("/include","");
-        if (StringUtils.equals(request.getParameter("f"),"json") ||
-            StringUtils.endsWith(request.getRequestURI(),".json")) {
-            response.setContentType("application/json");
-        } else if (StringUtils.equals(request.getParameter("f"),"xml") ||
-                StringUtils.endsWith(request.getRequestURI(),".xml")) {
+        if (StringUtils.equals(request.getParameter("f"),"xml") ||
+                StringUtils.endsWith(request.getRequestURI(),".xml") ||
+                StringUtils.startsWith(request.getHeader("Accept"),"application/xml")) {
             response.setContentType("application/xml");
-        } else if (StringUtils.isNoneEmpty(request.getHeader("Accept")) &&
-                request.getHeader("Accept").startsWith("*/*")){
-            response.setContentType("application/json");
-        } else if (StringUtils.isNoneEmpty(request.getHeader("Accept"))){
-            response.setContentType(request.getHeader("Accept"));
         } else {
             response.setContentType("application/json");
         }
         log.info("include uri:{}",uri);
         request.getRequestDispatcher(uri).include(request,response);
-
     }
 }
