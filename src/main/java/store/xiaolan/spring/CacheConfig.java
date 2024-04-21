@@ -82,7 +82,7 @@ public class CacheConfig {
         }
         if (redisProperties.getKeyPrefix() != null) {
 //            config = config.prefixCacheNameWith(redisProperties.getKeyPrefix());
-            config = config.computePrefixWith(name -> redisProperties.getKeyPrefix()+name + "_");
+            config = config.computePrefixWith(name -> redisProperties.getKeyPrefix() +":"+name + ":");
         }
         if (!redisProperties.isCacheNullValues()) {
             config = config.disableCachingNullValues();
