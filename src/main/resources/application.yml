@@ -51,7 +51,7 @@ spring:
       write-dates-as-timestamps: false
   cache:
     redis:
-      key-prefix: arnold_
+      key-prefix: web_
       time-to-live: 6h # redis过期时间设置。这样缓存可以
       cache-null-values: true
   data:

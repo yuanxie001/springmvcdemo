@@ -11,6 +11,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -23,6 +24,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import store.xiaolan.spring.threadpool.OrderedPartitionThreadPoolExecutor;
 
+import java.lang.reflect.Method;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -79,7 +81,8 @@ public class CacheConfig {
             config = config.entryTtl(redisProperties.getTimeToLive());
         }
         if (redisProperties.getKeyPrefix() != null) {
-            config = config.prefixCacheNameWith(redisProperties.getKeyPrefix());
+//            config = config.prefixCacheNameWith(redisProperties.getKeyPrefix());
+            config = config.computePrefixWith(name -> redisProperties.getKeyPrefix()+name + "_");
         }
         if (!redisProperties.isCacheNullValues()) {
             config = config.disableCachingNullValues();

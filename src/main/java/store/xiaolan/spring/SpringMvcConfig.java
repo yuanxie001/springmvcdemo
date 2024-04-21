@@ -57,7 +57,10 @@ public class SpringMvcConfig implements WebMvcConfigurer, WebMvcRegistrations {
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         WebMvcConfigurer.super.configureMessageConverters(converters);
-        Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder().indentOutput(true).dateFormat(new SimpleDateFormat("yyyy-MM-dd")).modulesToInstall(new ParameterNamesModule());
+        Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder()
+                .indentOutput(true)
+                .dateFormat(new SimpleDateFormat("yyyy-MM-dd"))
+                .modulesToInstall(new ParameterNamesModule());
         converters.add(new MappingJackson2HttpMessageConverter(builder.build()));
         converters.add(new MappingJackson2XmlHttpMessageConverter(builder.createXmlMapper(true).build()));
     }
