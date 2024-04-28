@@ -116,6 +116,7 @@ public class SpringMvcConfig implements WebMvcConfigurer, WebMvcRegistrations {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**");
+        registry.addMapping("/person/**");
     }
 
     @Bean
