@@ -3,7 +3,7 @@ package store.xiaolan.spring.mvc.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import store.xiaolan.spring.domian.Category;
+import store.xiaolan.spring.mvc.vo.CategoryVo;
 import store.xiaolan.spring.service.CategoryService;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping("/category")
-    public List<Category> list(){
+    public List<CategoryVo> list(){
         return categoryService.list();
     }
 
