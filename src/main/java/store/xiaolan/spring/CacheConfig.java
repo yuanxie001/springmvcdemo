@@ -10,10 +10,13 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.cache.CacheProperties;
+import org.springframework.boot.web.embedded.tomcat.TomcatProtocolHandlerCustomizer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.AsyncTaskExecutor;
+import org.springframework.core.task.support.TaskExecutorAdapter;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -30,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.TimeZone;
+import java.util.concurrent.Executors;
 
 /**
  * @EnableCaching 开启缓存注解，用来配置开启缓存模式的。相当于xml里面的<cache:annonation-driven/>
@@ -109,4 +113,17 @@ public class CacheConfig {
     public OrderedPartitionThreadPoolExecutor orderThreadPoolExecutor(){
         return new OrderedPartitionThreadPoolExecutor("order",threadPoolProperties.getCoreSize());
     }
+
+    @Bean
+    public AsyncTaskExecutor applicationTaskExecutor() {
+        return new TaskExecutorAdapter(Executors.newVirtualThreadPerTaskExecutor());
+    }
+
+    @Bean
+    public TomcatProtocolHandlerCustomizer<?> protocolHandlerCustomizer() {
+        return protocolHandler -> {
+            protocolHandler.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
+        };
+    }
+
 }
