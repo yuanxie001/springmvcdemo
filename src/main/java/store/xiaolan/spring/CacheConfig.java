@@ -114,16 +114,16 @@ public class CacheConfig {
         return new OrderedPartitionThreadPoolExecutor("order",threadPoolProperties.getCoreSize());
     }
 
-    @Bean
-    public AsyncTaskExecutor applicationTaskExecutor() {
-        return new TaskExecutorAdapter(Executors.newVirtualThreadPerTaskExecutor());
-    }
-
-    @Bean
-    public TomcatProtocolHandlerCustomizer<?> protocolHandlerCustomizer() {
-        return protocolHandler -> {
-            protocolHandler.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
-        };
-    }
+//    @Bean
+//    public AsyncTaskExecutor applicationTaskExecutor() {
+//        return new TaskExecutorAdapter(Executors.newVirtualThreadPerTaskExecutor());
+//    }
+//
+//    @Bean
+//    public TomcatProtocolHandlerCustomizer<?> protocolHandlerCustomizer() {
+//        return protocolHandler -> {
+//            protocolHandler.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
+//        };
+//    }
 
 }

@@ -1,6 +1,7 @@
 package store.xiaolan.spring;
 
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import jakarta.servlet.DispatcherType;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,10 +31,7 @@ import store.xiaolan.spring.component.mongo.id.SnowflakeIdGenerate;
 import store.xiaolan.spring.mvc.controller.interceptor.TestInterceptor;
 
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Configuration
 @PropertySource("classpath:config.properties")
@@ -137,6 +135,8 @@ public class SpringMvcConfig implements WebMvcConfigurer, WebMvcRegistrations {
         TrackingIdFilter filter = new TrackingIdFilter();
         filterBean.setFilter(filter);
         filterBean.addUrlPatterns("/*");
+        EnumSet<DispatcherType> dispatcherTypes = EnumSet.of(DispatcherType.REQUEST,DispatcherType.ERROR,DispatcherType.ASYNC);
+        filterBean.setDispatcherTypes(dispatcherTypes);
         return filterBean;
     }
 
