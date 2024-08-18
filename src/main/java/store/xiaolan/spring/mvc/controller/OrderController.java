@@ -1,7 +1,10 @@
 package store.xiaolan.spring.mvc.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.server.RequestPath;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.ServletRequestPathUtils;
 import store.xiaolan.spring.domian.Order;
 import store.xiaolan.spring.service.OrderService;
 
@@ -24,7 +27,9 @@ public class OrderController {
     }
 
     @GetMapping("order/{id:.+}")
-    public Order getOrder(@PathVariable("id") Long id){
+    public Order getOrder(@PathVariable("id") Long id, HttpServletRequest request){
+        RequestPath parsedRequestPath = ServletRequestPathUtils.getParsedRequestPath(request);
+
         return orderService.getOrder(id);
     }
 
