@@ -50,17 +50,7 @@ public class TimeZoneUtils {
         }
         return toGmt(time,format,timeZone.getID());
     }
-    
-    public static void main(String[] args) {
-        String date;
-        String format = "yyyy-MM-dd HH:mm:ss";
-        SimpleDateFormat fmt = new SimpleDateFormat(format);
-        date=fmt.format(new Date());
-        logger.info("转化前的时间："+date);
-        String s = toGmt(date, format, "GMT+8:00");
 
-        logger.info("转化后的时间："+ s);
-    }
 
     public static Map<String,String> getTimezoneMap() {
         return null;

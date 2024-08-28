@@ -18,6 +18,9 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
+import org.springframework.retry.RetryPolicy;
+import org.springframework.retry.policy.SimpleRetryPolicy;
+import org.springframework.retry.support.RetryTemplate;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.*;
@@ -155,5 +158,20 @@ public class SpringMvcConfig implements WebMvcConfigurer, WebMvcRegistrations {
     @Override
     public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
         return new SupportExtRequestHandlerMapping();
+    }
+
+    @Bean
+    public RetryTemplate retryTemplate(RetryPolicy retryPolicy) {
+        RetryTemplate template = new RetryTemplate();
+        template.setRetryPolicy(retryPolicy);
+        return template;
+    }
+
+    @Bean
+    public SimpleRetryPolicy retryPolicy() {
+        return new SimpleRetryPolicy(
+                3, // 最多重试次数
+                Map.of(Exception.class, true),true
+        );
     }
 }
