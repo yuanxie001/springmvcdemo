@@ -13,15 +13,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.format.FormatterRegistry;
+import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.retry.RetryPolicy;
 import org.springframework.retry.policy.SimpleRetryPolicy;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.method.HandlerTypePredicate;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
@@ -75,6 +79,9 @@ public class SpringMvcConfig implements WebMvcConfigurer, WebMvcRegistrations {
     public void configurePathMatch(PathMatchConfigurer configurer) {
         UrlPathHelper urlPathHelper = new UrlPathHelper();
         urlPathHelper.setRemoveSemicolonContent(false);
+        urlPathHelper.setUrlDecode(false);
+        //特定的注解加上特定的前缀
+        //configurer.addPathPrefix("/api", HandlerTypePredicate.forAnnotation(RestController.class));
         configurer.setUrlPathHelper(urlPathHelper);
     }
 
@@ -158,6 +165,13 @@ public class SpringMvcConfig implements WebMvcConfigurer, WebMvcRegistrations {
     @Override
     public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
         return new SupportExtRequestHandlerMapping();
+    }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        DateTimeFormatterRegistrar registrar = new DateTimeFormatterRegistrar();
+        registrar.setUseIsoFormat(true);
+        registrar.registerFormatters(registry);
     }
 
     @Bean
